@@ -17,7 +17,14 @@ steps:
   waitFor: ['-']
 
 - name: 'gcr.io/$PROJECT_ID/yaml-snippets-env'
+  args: ['npm', 'run', 'build', '--prod']
+  id: BUILD
+  waitFor:
+    - INSTALL
+
+- name: 'gcr.io/$PROJECT_ID/yaml-snippets-env'
   args: ['npm', 'run', 'deploy']
   waitFor:
     - DECRYPT
     - INSTALL
+    - BUILD

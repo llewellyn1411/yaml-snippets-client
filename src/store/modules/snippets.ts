@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import { Store } from 'vuex';
-import Snippet from '../../../../interfaces/Snippet';
+import Snippet from '../../interfaces/Snippet';
 
 interface State {
     activeSnippet?: Snippet;

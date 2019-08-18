@@ -1,4 +1,4 @@
-# Docker Snippets
+# Yaml Snippets
 
 ## Project setup
 

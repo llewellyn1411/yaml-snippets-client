@@ -1,0 +1,72 @@
+[debug] [2019-08-18T14:39:28.460Z] ----------------------------------------------------------------------
+[debug] [2019-08-18T14:39:28.463Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lccol\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --debug --token $FIREBASE_TOKEN
+[debug] [2019-08-18T14:39:28.464Z] CLI Version:   7.0.2
+[debug] [2019-08-18T14:39:28.464Z] Platform:      win32
+[debug] [2019-08-18T14:39:28.464Z] Node Version:  v10.15.3
+[debug] [2019-08-18T14:39:28.465Z] Time:          Sun Aug 18 2019 15:39:28 GMT+0100 (British Summer Time)
+[debug] [2019-08-18T14:39:28.466Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-08-18T14:39:28.473Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-08-18T14:39:28.474Z] > authorizing via --token option
+[debug] [2019-08-18T14:39:28.474Z] [iam] checking project yaml-snippets for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-08-18T14:39:28.475Z] > refreshing access token with scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-08-18T14:39:28.476Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-08-18T14:39:28.648Z] <<< HTTP RESPONSE 400
+[debug] [2019-08-18T14:39:28.651Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/yaml-snippets:testIamPermissions  
+
+[debug] [2019-08-18T14:39:29.385Z] <<< HTTP RESPONSE 401
+[debug] [2019-08-18T14:39:29.386Z] <<< HTTP RESPONSE BODY
+[error] 
+[error] Error: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2019-08-18T14:39:29.389Z] Error Context: {
+  "body": {
+    "error": {
+      "code": 401,
+      "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+      "status": "UNAUTHENTICATED"
+    }
+  },
+  "response": {
+    "statusCode": 401,
+    "body": {
+      "error": {
+        "code": 401,
+        "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+        "status": "UNAUTHENTICATED"
+      }
+    },
+    "headers": {
+      "www-authenticate": "Bearer realm=\"https://accounts.google.com/\", error=\"invalid_token\"",
+      "vary": "X-Origin, Referer, Origin,Accept-Encoding",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Sun, 18 Aug 2019 14:39:31 GMT",
+      "server": "ESF",
+      "cache-control": "private",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "server-timing": "gfet4t7; dur=612",
+      "alt-svc": "quic=\":443\"; ma=2592000; v=\"46,43,39\"",
+      "accept-ranges": "none",
+      "transfer-encoding": "chunked"
+    },
+    "request": {
+      "uri": {
+        "protocol": "https:",
+        "slashes": true,
+        "auth": null,
+        "host": "cloudresourcemanager.googleapis.com",
+        "port": 443,
+        "hostname": "cloudresourcemanager.googleapis.com",
+        "hash": null,
+        "search": null,
+        "query": null,
+        "pathname": "/v1/projects/yaml-snippets:testIamPermissions",
+        "path": "/v1/projects/yaml-snippets:testIamPermissions",
+        "href": "https://cloudresourcemanager.googleapis.com/v1/projects/yaml-snippets:testIamPermissions"
+      },
+      "method": "POST"
+    }
+  }
+}

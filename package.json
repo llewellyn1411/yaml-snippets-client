@@ -4,6 +4,7 @@
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
+        "build:deploy": "cross-env VUE_APP_FIREBASE_API_KEY=\"$VUE_APP_FIREBASE_API_KEY\" VUE_APP_FIREBASE_APP_ID=\"$VUE_APP_FIREBASE_APP_ID\" vue-cli-service build --prod",
         "lint": "vue-cli-service lint",
         "lint:fix": "vue-cli-service lint --fix",
         "test:e2e": "vue-cli-service test:e2e",
@@ -34,6 +35,7 @@
         "@vue/test-utils": "1.0.0-beta.29",
         "babel-core": "7.0.0-bridge.0",
         "chance": "^1.0.18",
+        "cross-env": "^5.2.0",
         "husky": "^3.0.4",
         "lint-staged": "^9.2.0",
         "node-sass": "^4.12.0",

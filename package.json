@@ -48,7 +48,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "npm run lint:fix",
+            "pre-commit": "vue-cli-service lint --fix; git add --no-verify",
             "pre-push": "npm run test:unit"
         }
     }

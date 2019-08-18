@@ -3,14 +3,12 @@
     "version": "0.1.0",
     "scripts": {
         "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "build:deploy": "vue-cli-service build --prod",
+        "build": "vue-cli-service build --prod",
         "lint": "vue-cli-service lint",
         "lint:fix": "vue-cli-service lint --fix",
         "test:e2e": "vue-cli-service test:e2e",
         "test:unit": "vue-cli-service test:unit",
-        "encrypt:env": "gcloud kms encrypt --plaintext-file=.env --ciphertext-file=.env.enc --location=global --keyring=yaml-snippets --key=yaml-snippets-env",
-        "deploy": "firebase deploy --debug --token \"$FIREBASE_TOKEN\""
+        "encrypt:env": "gcloud kms encrypt --plaintext-file=.env --ciphertext-file=.env.enc --location=global --keyring=yaml-snippets --key=yaml-snippets-env"
     },
     "dependencies": {
         "core-js": "^3.1.4",

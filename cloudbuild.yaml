@@ -1,24 +1,10 @@
 steps:
-- name: gcr.io/cloud-builders/gcloud
-  args:
-  - kms
-  - decrypt
-  - --ciphertext-file=.env.enc
-  - --plaintext-file=.env
-  - --location=global
-  - --keyring=yaml-snippets
-  - --key=yaml-snippets-env
-  id: DECRYPT
-  waitFor: ['-']
 
 - name: 'gcr.io/$PROJECT_ID/yaml-snippets-env'
   args: ['npm', 'install']
-  id: INSTALL
-  waitFor: ['-']
 
 - name: 'gcr.io/$PROJECT_ID/yaml-snippets-env'
-  args: ['npm', 'run', 'build:deploy']
-  id: BUILD
+  args: ['npm', 'run', 'build']
   env: [
       'VUE_APP_FIREBASE_API_KEY=${_VUE_APP_FIREBASE_API_KEY}',
       'VUE_APP_FIREBASE_AUTH_DOMAIN=${_VUE_APP_FIREBASE_AUTH_DOMAIN}',
@@ -28,12 +14,6 @@ steps:
       'VUE_APP_FIREBASE_MESSAGE_SENDER_ID=${_VUE_APP_FIREBASE_MESSAGE_SENDER_ID}',
       'VUE_APP_FIREBASE_APP_ID=${_VUE_APP_FIREBASE_APP_ID}'
   ]
-  waitFor:
-    - INSTALL
 
 - name: 'gcr.io/$PROJECT_ID/yaml-snippets-env'
-  args: ['npm', 'run', 'deploy']
-  waitFor:
-    - DECRYPT
-    - INSTALL
-    - BUILD
+  args: ['firebase', 'deploy', '--debug', '--token', '${_FIREBASE_TOKEN}']

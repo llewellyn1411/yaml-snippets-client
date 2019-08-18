@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/performance';
 
 const firebaseConfig = {
     apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -13,5 +14,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp( firebaseConfig );
+
+firebase.performance();
 
 export default firebase;

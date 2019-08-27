@@ -1,6 +1,5 @@
 <template>
-    <div class="page view">
-        <ProgressBar :loading="loading" />
+    <div class="page view" id="customise-view">
         <div v-if="!loading">
             <v-card class="mb-3">
                 <v-card-title primary-title>
@@ -38,14 +37,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import firebase from '../firebase';
-import ProgressBar from '@/components/ProgressBar';
 import Counter from '@/components/Counter';
 
 const regex = /{{([a-zA-Z]+):([a-zA-Z0-9]+)}}/g;
 
 export default {
     name: 'Snippet',
-    components: { ProgressBar, Counter },
+    components: { Counter },
     data() {
         return {
             loading: true,
@@ -58,8 +56,8 @@ export default {
     destroyed() {
         this.unsubscribe();
     },
-    async created() {
-        // await this.loadSnippet(this.id);
+    async mounted() {
+        this.$vs.loading({ container: '#customise-view', type: 'radius' });
 
         this.unsubscribe = firebase
             .firestore()
@@ -69,6 +67,7 @@ export default {
                 const data = doc.data();
                 if (this.loading === true) {
                     this.loading = false;
+
                     this.snippet = {
                         id: doc.id,
                         ...data
@@ -85,6 +84,8 @@ export default {
                 } else {
                     this.snippet.copyCount = data.copyCount;
                 }
+
+                this.$vs.loading.close('#customise-view > .con-vs-loading');
             });
     },
     computed: {

@@ -1,7 +1,6 @@
 <template>
-    <div class="page edit">
-        <ProgressBar :loading="loading || !activeSnippet" />
-        <v-form v-if="!loading && activeSnippet" v-model="valid" ref="form" lazy-validation>
+    <div class="page edit" id="edit-view">
+        <v-form v-if="activeSnippet" v-model="valid" ref="form" lazy-validation>
             <v-text-field v-model="activeSnippet.name" :counter="30" :rules="nameRules" label="Name" required clearable></v-text-field>
             <v-textarea
                 v-model="activeSnippet.description"
@@ -17,11 +16,9 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import ProgressBar from '@/components/ProgressBar';
 
 export default {
     name: 'SnippetEdit',
-    components: { ProgressBar },
     data() {
         return {
             name: '',
@@ -46,9 +43,10 @@ export default {
             ]
         };
     },
-    async created() {
+    async mounted() {
+        this.$vs.loading({ container: '#edit-view', type: 'radius' });
         await this.loadSnippet(this.id);
-        this.loading = false;
+        this.$vs.loading.close('#edit-view > .con-vs-loading');
     },
     computed: {
         ...mapGetters('snippets', ['activeSnippet']),

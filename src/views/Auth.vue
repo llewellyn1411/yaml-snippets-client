@@ -7,7 +7,6 @@
 <script>
 import firebase from '../firebase';
 import * as firebaseui from 'firebaseui';
-import ProgressBar from '@/components/ProgressBar';
 
 const uiConfig = {
     signInSuccessUrl: '/',
@@ -18,9 +17,6 @@ const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 export default {
     name: 'Auth',
-    components: {
-        ProgressBar
-    },
     mounted() {
         ui.start('#auth-container', uiConfig);
     }

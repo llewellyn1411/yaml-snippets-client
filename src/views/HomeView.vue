@@ -1,6 +1,6 @@
 <template>
     <div class="page home" id="home-view">
-        <SnippetList v-if="snippetList" :snippets="snippetList" :uid="uid" />
+        <SnippetList v-if="snippetList" :snippets="snippetList" :uid="uid" :isLoggedIn="isUserLoggedIn" />
     </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
     },
     computed: {
         ...mapGetters('snippets', ['snippetList']),
-        ...mapGetters('user', ['uid'])
+        ...mapGetters('user', ['uid', 'isUserLoggedIn'])
     },
     methods: {
         ...mapActions('snippets', [`loadSnippets`])

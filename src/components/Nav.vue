@@ -1,8 +1,8 @@
 <template>
-    <header class="navbar">
+    <header>
         <div class="navbar container">
             <section class="navbar-section">
-                <router-link to="/" class="btn btn-link" tabindex="1"><span>YAML SNIPPETS</span></router-link>
+                <router-link to="/" class="btn btn-link active" tabindex="1"><span>YAML SNIPPETS</span></router-link>
             </section>
             <div class="menu-button" :class="{ opened: isMenuOpened }" @click="toggle">
                 <div class="line"></div>

@@ -2,6 +2,7 @@
     <div class="snippet-list">
         <SnippetItem
             :uid="uid"
+            :isLoggedIn="isLoggedIn"
             :id="snippet.id"
             :name="snippet.name"
             :author="snippet.author.displayName"
@@ -28,7 +29,8 @@ export default {
     },
     props: {
         snippets: Array,
-        uid: String
+        uid: String,
+        isLoggedIn: Boolean
     },
     computed: {
         ...mapGetters('user', ['userDetails']),

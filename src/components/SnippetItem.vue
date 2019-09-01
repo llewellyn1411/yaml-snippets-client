@@ -4,7 +4,7 @@
             <div class="card-title">
                 <div class="title-section">
                     <h5>{{ name }}</h5>
-                    <div class="star" :class="{ isActive: starred }" @click="toggleStar"></div>
+                    <div v-if="isLoggedIn" class="star" :class="{ isActive: starred }" @click="toggleStar"></div>
                 </div>
                 <div class="counter-section">
                     <Counter label="copies" :value="copyCount" />
@@ -45,7 +45,8 @@ export default {
         copyCount: Number,
         starCount: Number,
         editable: Boolean,
-        starred: Boolean
+        starred: Boolean,
+        isLoggedIn: Boolean
     },
     data() {
         return {

@@ -28,7 +28,7 @@ export default new Router( {
       name: 'snippet-create',
       component: () => import( './views/SnippetCreateView.vue' ),
       beforeEnter: ( to, from, next ) => {
-        if ( store.state.user.isLoggedIn ) {
+        if ( store.getters[ 'user/isUserLoggedIn' ] ) {
           next();
         }
 
@@ -45,7 +45,7 @@ export default new Router( {
       name: 'snippet-edit',
       component: () => import( './views/SnippetEditView.vue' ),
       beforeEnter: ( to, from, next ) => {
-        if ( store.state.user.isLoggedIn ) {
+        if ( store.getters[ 'user/isUserLoggedIn' ] ) {
           next();
         }
 

@@ -37,7 +37,7 @@ import Counter from '@/components/Counter';
 const regex = /{{([a-zA-Z]+):([a-zA-Z0-9]+)}}/g;
 
 export default {
-    name: 'Snippet',
+    name: 'SnippetCustomiseView',
     components: { Counter },
     data() {
         return {

@@ -10,8 +10,8 @@
         </div>
         <section class="navbar-section menu-items" :class="{ closed: !isMenuOpened }">
             <router-link to="/" class="btn btn-link" tabindex="2"><span>Explore</span></router-link>
-            <router-link to="/snippet/create" class="btn btn-link" tabindex="3"><span>Create</span></router-link>
-            <router-link v-if="!isLoggedIn" to="/auth" class="btn btn-link" tabindex="4"><span>Sign In</span></router-link>
+            <router-link v-if="isLoggedIn" to="/snippet/create" class="btn btn-link" tabindex="3"><span>Create</span></router-link>
+            <router-link v-if="!isLoggedIn" to="/signin" class="btn btn-link" tabindex="4"><span>Sign In</span></router-link>
             <a v-if="isLoggedIn" href="#" class="btn btn-link" tabindex="4" @click="signOut"><span>Sign Out</span></a>
         </section>
     </header>

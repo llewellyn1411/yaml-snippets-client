@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-import Auth from './views/Auth.vue';
-import SnippetCreate from './views/SnippetCreate.vue';
-import SnippetView from './views/SnippetView.vue';
-import SnippetEdit from './views/SnippetEdit.vue';
+import HomeView from './views/HomeView.vue';
+import SignInView from './views/SignInView.vue';
+import SnippetCustomiseView from './views/SnippetCustomiseView.vue';
+import SnippetEditView from './views/SnippetEditView.vue';
+import store from './store/index';
 
 Vue.use( Router );
 
@@ -16,27 +16,45 @@ export default new Router( {
     {
       path: '/',
       name: 'explore',
-      component: Home
+      component: HomeView
     },
     {
-      path: '/auth',
-      name: 'auth',
-      component: Auth
+      path: '/signin',
+      name: 'signin',
+      component: SignInView
     },
     {
       path: '/snippet/create',
       name: 'snippet-create',
-      component: SnippetCreate
+      component: () => import( './views/SnippetCreateView.vue' ),
+      beforeEnter: ( to, from, next ) => {
+        if ( store.state.user.isLoggedIn ) {
+          next();
+        }
+
+        next( false );
+      }
     },
     {
       path: '/snippet/:id',
-      name: 'snippet-view',
-      component: SnippetView
+      name: 'snippet-customise',
+      component: () => import( './views/SnippetCustomiseView.vue' )
     },
     {
       path: '/snippet/edit/:id',
       name: 'snippet-edit',
-      component: SnippetEdit
+      component: () => import( './views/SnippetEditView.vue' ),
+      beforeEnter: ( to, from, next ) => {
+        if ( store.state.user.isLoggedIn ) {
+          next();
+        }
+
+        next( false );
+      }
+    },
+    {
+      path: '/*',
+      component: HomeView
     }
   ]
 } );

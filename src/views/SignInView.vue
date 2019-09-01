@@ -21,7 +21,7 @@ const uiConfig = {
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 export default {
-    name: 'Auth',
+    name: 'SignInView',
     mounted() {
         ui.start('#auth-container', uiConfig);
     }

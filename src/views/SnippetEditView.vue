@@ -50,7 +50,7 @@ import { mapActions, mapGetters } from 'vuex';
 import InputText from '../components/InputText';
 
 export default {
-    name: 'SnippetEdit',
+    name: 'SnippetEditView',
     components: {
         InputText
     },

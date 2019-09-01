@@ -49,7 +49,7 @@
 import { mapActions } from 'vuex';
 import InputText from '../components/InputText';
 export default {
-    name: 'Create',
+    name: 'SnippetCreateView',
     components: {
         InputText
     },

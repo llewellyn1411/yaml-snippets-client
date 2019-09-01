@@ -9,7 +9,7 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 import SnippetList from '@/components/SnippetList';
 
 export default {
-    name: 'Home',
+    name: 'HomeView',
     components: {
         SnippetList
     },

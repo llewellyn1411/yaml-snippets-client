@@ -47,3 +47,19 @@ html {
         transform: rotate(35deg);
     }
 }
+
+.container {
+    width: 100%;
+}
+
+code {
+    display: block;
+    word-break: break-all !important;
+}
+
+@media (min-width: 840px) {
+    .container {
+        width: 50%;
+        margin: 0 auto;
+    }
+}

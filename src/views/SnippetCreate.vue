@@ -131,15 +131,3 @@ export default {
     }
 };
 </script>
-<style lang="scss">
-.page-create {
-    width: 100%;
-}
-
-@media (min-width: 840px) {
-    .page-create {
-        width: 50%;
-        margin: 0 auto;
-    }
-}
-</style>

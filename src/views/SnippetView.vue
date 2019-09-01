@@ -10,15 +10,17 @@
         </div>
         <div class="card-body">
             <div class="form-group" v-for="(item, index) in variables" :key="index">
-                <label class="form-label" :for="`input-${item.name}`">{item.name}</label>
+                <label class="form-label" :for="`input-${item.name}`">{{ item.name }}</label>
                 <input
                     class="form-input"
                     type="text"
+                    autocomplete="off"
                     :id="`input-${item.name}`"
                     :placeholder="item.name"
                     @input="onValueChanged(index, $event)"
                 />
             </div>
+            <code class="language-yaml" v-html="liveContent"></code>
         </div>
         <div class="card-footer">
             <button @click="onCopy" class="btn btn-primary">Copy</button>
@@ -27,6 +29,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-yaml';
 import firebase from '../firebase';
 import Counter from '@/components/Counter';
 
@@ -87,13 +91,13 @@ export default {
                 return output.replace(new RegExp(regexStr, 'g'), variable.value);
             }, this.snippet.content);
 
-            this.liveContent = content;
+            this.liveContent = Prism.highlight(content, Prism.languages.yaml, 'yaml');
         }
     },
     methods: {
         ...mapActions('snippets', ['loadSnippet', 'incrementSnippetCopies']),
         onValueChanged(index, value) {
-            this.variables.splice(index, 1, Object.assign(this.variables[index], { value }));
+            this.variables.splice(index, 1, Object.assign(this.variables[index], { value: value.target.value }));
         },
         async onCopy() {
             this.$copyText(this.liveContent).then(() => {

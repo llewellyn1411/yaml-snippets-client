@@ -7,8 +7,8 @@ import store from './store/index';
 
 import './registerServiceWorker';
 import 'firebaseui/dist/firebaseui.css';
+import 'prismjs/themes/prism-funky.css';
 import './assets/styles/main.scss';
-
 
 Vue.use( VueClipboard );
 
@@ -26,7 +26,6 @@ new Vue( {
                 this.$store.dispatch( 'snippets/loadStarredSnippets', user.uid );
             } else {
                 this.$store.dispatch( 'user/setUserLoggedInStatus', false );
-                this.$router.push( '/auth' );
             }
 
             this.$store.dispatch( 'setReadyState', true );

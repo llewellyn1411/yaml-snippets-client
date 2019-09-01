@@ -151,15 +151,3 @@ export default {
     }
 };
 </script>
-<style lang="scss">
-.page-edit {
-    width: 100%;
-}
-
-@media (min-width: 840px) {
-    .page-edit {
-        width: 50%;
-        margin: 0 auto;
-    }
-}
-</style>

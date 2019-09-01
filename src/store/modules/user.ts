@@ -65,6 +65,9 @@ export default {
         isUserLoggedIn( state: State ) {
             return state.isLoggedIn;
         },
+        uid( state: State ) {
+            return state.uid;
+        },
         userDetails( state: State ) {
             return {
                 name: state.displayName,

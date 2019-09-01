@@ -15,7 +15,7 @@ export default {
     },
     computed: {
         ...mapGetters('snippets', ['snippetList']),
-        ...mapState('user', ['uid'])
+        ...mapGetters('user', ['uid'])
     },
     methods: {
         ...mapActions('snippets', [`loadSnippets`])

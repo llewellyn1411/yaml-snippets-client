@@ -6,12 +6,12 @@ import user from './modules/user';
 Vue.use( Vuex );
 interface State {
   version?: string;
-  ready: boolean;
+  isAppReady: boolean;
 }
 
 const defaultState: State = {
   version: '0.1.0',
-  ready: false
+  isAppReady: false
 };
 
 const modules: any = {
@@ -23,20 +23,17 @@ const store: StoreOptions<State> = {
   state: defaultState,
   mutations: {
     setReadyState( state, isReady: boolean ) {
-      state.ready = isReady;
+      state.isAppReady = isReady;
     }
   },
   actions: {
     setReadyState( { commit }, isReady: boolean ) {
       commit( 'setReadyState', isReady );
-    },
-    setLoadingState( { commit }, isLoading: boolean ) {
-      commit( 'setLoadingState', isLoading );
     }
   },
   getters: {
     ready( state ) {
-      return state.ready;
+      return state.isAppReady;
     }
   },
   modules

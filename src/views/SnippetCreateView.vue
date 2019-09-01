@@ -70,7 +70,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions('snippets', ['addSnippet']),
+        ...mapActions('snippets', ['createSnippet']),
         validate() {
             this.isValidForm = this.errors.name && this.errors.description && this.errors.snippet;
         },
@@ -119,7 +119,7 @@ export default {
         async onSubmit() {
             if (this.isValidForm) {
                 this.isSubmitBtnLoading = true;
-                await this.addSnippet({
+                await this.createSnippet({
                     name: this.name,
                     description: this.description,
                     content: this.snippet

@@ -1,6 +1,7 @@
 <template>
     <div class="snippet-list">
         <SnippetItem
+            :uid="uid"
             :id="snippet.id"
             :name="snippet.name"
             :author="snippet.author.displayName"

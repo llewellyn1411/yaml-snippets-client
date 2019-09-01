@@ -3,7 +3,6 @@ import { Store } from 'vuex';
 import Snippet from '../../interfaces/Snippet';
 
 interface State {
-    activeSnippet?: Snippet;
     snippetList?: Snippet[];
     starredSnippetIds: string[];
 }
@@ -14,7 +13,6 @@ interface EditStarPayload {
 }
 
 const defaultState: State = {
-    activeSnippet: undefined,
     snippetList: undefined,
     starredSnippetIds: []
 };
@@ -25,18 +23,15 @@ export default {
     namespaced: true,
     state: defaultState,
     mutations: {
-        setSnippets( state: State, newSnippets: Snippet[] ) {
+        updateSnippets( state: State, newSnippets: Snippet[] ) {
             state.snippetList = newSnippets;
         },
-        setActiveSnippet( state: State, snippet: Snippet ) {
-            state.activeSnippet = snippet;
-        },
-        addSnippet( state: State, snippet: Snippet ) {
+        appendSnippetToList( state: State, snippet: Snippet ) {
             if ( state.snippetList && snippet ) {
                 state.snippetList.push( snippet );
             }
         },
-        deleteSnippet( state: State, id: string ) {
+        removeSnippetFromList( state: State, id: string ) {
             if ( state.snippetList ) {
                 const index = state.snippetList.findIndex( ( snippet ) => {
                     return snippet.id === id;
@@ -47,15 +42,15 @@ export default {
                 }
             }
         },
-        editSnippet( state: State, editedSnippet: Snippet ) {
+        updateSnippet( state: State, targetSnippet: Snippet ) {
             if ( state.snippetList ) {
                 const index = state.snippetList.findIndex( ( snippet ) => {
-                    return snippet.id === editedSnippet.id;
+                    return snippet.id === targetSnippet.id;
                 } );
 
                 const oldSnippet = state.snippetList[ index ];
                 if ( oldSnippet ) {
-                    state.snippetList[ index ] = Object.assign( oldSnippet, editedSnippet );
+                    state.snippetList[ index ] = Object.assign( oldSnippet, targetSnippet );
                 }
             }
         },
@@ -70,7 +65,7 @@ export default {
                 }
             }
         },
-        setStarredSnippets( state: State, starredSnippetIds: string[] ) {
+        updateStarredSnippets( state: State, starredSnippetIds: string[] ) {
             state.starredSnippetIds = starredSnippetIds;
         },
         addStar( state: State, snippetId: string ) {
@@ -89,7 +84,7 @@ export default {
                 .where( 'userId', '==', uid ).get()
                 .then( ( querySnapShot ) => {
                     const starredSnippetIds = querySnapShot.docs.map( ( doc ) => doc.data().snippetId );
-                    commit( 'setStarredSnippets', starredSnippetIds );
+                    commit( 'updateStarredSnippets', starredSnippetIds );
                 } );
         },
         loadSnippets( { commit }: Store<State> ) {
@@ -103,7 +98,7 @@ export default {
                         };
                     } );
 
-                    commit( 'setSnippets', payload );
+                    commit( 'updateSnippets', payload );
                 } );
         },
         loadSnippet( { commit }: Store<State>, id: string ) {
@@ -116,16 +111,15 @@ export default {
                         ...data
                     };
 
-                    commit( 'setActiveSnippet', payload );
-
                     return payload;
                 } );
         },
-        addSnippet( { commit }: Store<State>, snippet: Snippet ) {
+        createSnippet( { commit }: Store<State>, snippet: Snippet ) {
             // TODO: Validate
             const currentUser = firebase.auth().currentUser;
             const uid = currentUser!.uid;
             const displayName = currentUser!.displayName;
+
             return firebase.firestore().collection( 'snippets' ).add( {
                 ...snippet,
                 author: {
@@ -149,25 +143,23 @@ export default {
                     }
                 };
 
-                commit( 'addSnippet', payload );
-                commit( 'setActiveSnippet', payload );
+                commit( 'appendSnippetToList', payload );
             } );
         },
-        deleteSnippet( { commit }: Store<State>, id: string ) {
+        removeSnippet( { commit }: Store<State>, id: string ) {
             return firebase.firestore().collection( 'snippets' ).doc( id ).delete()
                 .then( () => {
-                    commit( 'deleteSnippet', id );
+                    commit( 'removeSnippetFromList', id );
                 } );
         },
-        editSnippet( { commit }: Store<State>, snippet: Snippet ) {
+        updateSnippet( { commit }: Store<State>, snippet: Snippet ) {
             // TODO: Validate
             return firebase.firestore().collection( 'snippets' ).doc( snippet.id ).update( {
                 name: snippet.name,
                 content: snippet.content,
                 description: snippet.description
             } ).then( () => {
-                commit( 'editSnippet', snippet );
-                commit( 'setActiveSnippet', snippet );
+                commit( 'updateSnippet', snippet );
             } );
         },
         incrementSnippetCopies( { commit }: Store<State>, snippetId: string ) {
@@ -193,9 +185,6 @@ export default {
         }
     },
     getters: {
-        activeSnippet( state: State ) {
-            return state.activeSnippet;
-        },
         snippetList( state: State ) {
             return state.snippetList;
         },

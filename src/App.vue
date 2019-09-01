@@ -1,8 +1,8 @@
 <template>
     <div>
-        <Nav v-if="ready" :visible="true" :isLoggedIn="isLoggedIn" :onSignOut="onSignOut" />
+        <Nav v-if="isAppReady" :visible="true" :isLoggedIn="isLoggedIn" :onSignOut="onSignOut" />
 
-        <section class="container" v-if="ready">
+        <section class="container" v-if="isAppReady">
             <router-view></router-view>
         </section>
     </div>
@@ -26,7 +26,7 @@ export default {
     },
     computed: {
         ...mapState('user', ['isLoggedIn']),
-        ...mapState(['ready'])
+        ...mapState(['isAppReady'])
     }
 };
 </script>

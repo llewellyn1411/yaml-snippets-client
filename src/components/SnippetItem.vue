@@ -20,7 +20,7 @@
             <div class="btn-group btn-group-block">
                 <router-link :to="`/snippet/${id}`" class="btn btn-primary">Customise</router-link>
                 <router-link v-if="editable" :to="`/snippet/edit/${id}`" class="btn btn-primary">Edit</router-link>
-                <button v-if="editable" @click="deleteSnippet(id)" class="btn btn-primary">Delete</button>
+                <button v-if="editable" @click="removeSnippet(id)" class="btn btn-primary">Delete</button>
             </div>
         </div>
     </div>
@@ -35,6 +35,7 @@ export default {
         Counter
     },
     props: {
+        uid: String,
         id: String,
         name: String,
         author: String,
@@ -52,14 +53,14 @@ export default {
         };
     },
     methods: {
-        ...mapActions('snippets', ['deleteSnippet', 'addStar', 'removeStar']),
+        ...mapActions('snippets', ['removeSnippet', 'addStar', 'removeStar']),
         async toggleStar() {
             if (!this.isStarActionPending) {
                 this.isStarActionPending = true;
                 if (!this.starred) {
-                    await this.addStar({ userId: this.authorId, snippetId: this.id });
+                    await this.addStar({ userId: this.uid, snippetId: this.id });
                 } else {
-                    await this.removeStar({ userId: this.authorId, snippetId: this.id });
+                    await this.removeStar({ userId: this.uid, snippetId: this.id });
                 }
                 this.isStarActionPending = false;
             }

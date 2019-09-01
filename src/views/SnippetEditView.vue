@@ -46,7 +46,7 @@
     </section>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 import InputText from '../components/InputText';
 
 export default {
@@ -80,13 +80,12 @@ export default {
         });
     },
     computed: {
-        ...mapGetters('snippets', ['activeSnippet']),
         id() {
             return this.$route.params.id;
         }
     },
     methods: {
-        ...mapActions('snippets', [`addSnippet`, `loadSnippet`, `editSnippet`]),
+        ...mapActions('snippets', [`loadSnippet`, `updateSnippet`]),
         validate() {
             this.isFormValid = this.errors.name && this.errors.description && this.errors.snippet;
         },
@@ -136,7 +135,7 @@ export default {
             if (this.isFormValid) {
                 this.isEditBtnLoading = true;
 
-                await this.editSnippet({
+                await this.updateSnippet({
                     id: this.snippetId,
                     name: this.name,
                     description: this.description,

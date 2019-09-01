@@ -95,7 +95,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('snippets', ['loadSnippet', 'incrementSnippetCopies']),
+        ...mapActions('snippets', ['incrementSnippetCopies']),
         onValueChanged(index, value) {
             this.variables.splice(index, 1, Object.assign(this.variables[index], { value: value.target.value }));
         },

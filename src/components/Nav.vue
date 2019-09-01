@@ -1,19 +1,20 @@
 <template>
-    <nav>
-        <v-toolbar v-if="visible" color="primary" app dark>
-            <v-toolbar-title class="headline text-uppercase">
-                <span>Docker</span>
-                <span class="font-weight-light">Snippets</span>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn name="explore" id="explore-button" flat to="/">Explore</v-btn>
-                <v-btn name="create" id="explore-button" flat to="/snippet/create">Create</v-btn>
-                <v-btn name="sign-in" v-if="!isLoggedIn" id="signin-button" flat to="/auth">Sign In</v-btn>
-                <v-btn name="sign-out" v-if="isLoggedIn" id="signout-button" flat @click="signOut">Sign Out</v-btn>
-            </v-toolbar-items>
-        </v-toolbar>
-    </nav>
+    <header class="navbar">
+        <section class="navbar-section">
+            <router-link to="/" class="btn btn-link" tabindex="1"><span>YAML SNIPPETS</span></router-link>
+        </section>
+        <div class="menu-button" :class="{ opened: isMenuOpened }" @click="toggle">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+        <section class="navbar-section menu-items" :class="{ closed: !isMenuOpened }">
+            <router-link to="/" class="btn btn-link" tabindex="2"><span>Explore</span></router-link>
+            <router-link to="/snippet/create" class="btn btn-link" tabindex="3"><span>Create</span></router-link>
+            <router-link v-if="!isLoggedIn" to="/auth" class="btn btn-link" tabindex="4"><span>Sign In</span></router-link>
+            <a v-if="isLoggedIn" href="#" class="btn btn-link" tabindex="4"><span>Sign Out</span></a>
+        </section>
+    </header>
 </template>
 
 <script>
@@ -33,7 +34,15 @@ export default {
             type: Function
         }
     },
+    data() {
+        return {
+            isMenuOpened: false
+        };
+    },
     methods: {
+        toggle() {
+            this.isMenuOpened = !this.isMenuOpened;
+        },
         signOut() {
             this.onSignOut();
         }

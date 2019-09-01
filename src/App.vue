@@ -1,12 +1,11 @@
 <template>
-    <v-app>
+    <div>
         <Nav v-if="ready" :visible="true" :isLoggedIn="isLoggedIn" :onSignOut="onSignOut" />
-        <v-content>
-            <v-container v-if="ready">
-                <router-view></router-view>
-            </v-container>
-        </v-content>
-    </v-app>
+
+        <section class="container" v-if="ready">
+            <router-view></router-view>
+        </section>
+    </div>
 </template>
 
 <script>

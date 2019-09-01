@@ -1,36 +1,27 @@
 <template>
-    <div class="page view" id="customise-view">
-        <div v-if="!loading">
-            <v-card class="mb-3">
-                <v-card-title primary-title>
-                    <div>
-                        <h3 class="headline mb-0 info-name">{{ snippet.name }}</h3>
-                        <div class="info-author">By User: {{ snippet.author.displayName }}</div>
-                    </div>
-                    <v-spacer></v-spacer>
-
-                    <Counter label="copies" :value="snippet.copyCount" />
-                </v-card-title>
-
-                <v-card-text class="variables">
-                    <v-text-field
-                        v-for="(item, index) in variables"
-                        :key="index"
-                        :label="item.name"
-                        :value="item.value"
-                        :name="item.name"
-                        @input="onValueChanged(index, $event)"
-                        class="variable"
-                    ></v-text-field>
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-btn name="copy" flat color="orange" @click="onCopy">Copy</v-btn>
-                </v-card-actions>
-            </v-card>
-            <v-sheet class="d-flex content" color="grey lighten-3" height="424">
-                {{ liveContent }}
-            </v-sheet>
+    <div v-if="!loading" class="card page-customise">
+        <div class="card-header">
+            <div class="card-title">
+                <div class="title-section">
+                    <h5>{{ snippet.name }}</h5>
+                </div>
+            </div>
+            <div class="card-subtitle text-gray">{{ snippet.author.displayName }}</div>
+        </div>
+        <div class="card-body">
+            <div class="form-group" v-for="(item, index) in variables" :key="index">
+                <label class="form-label" :for="`input-${item.name}`">{item.name}</label>
+                <input
+                    class="form-input"
+                    type="text"
+                    :id="`input-${item.name}`"
+                    :placeholder="item.name"
+                    @input="onValueChanged(index, $event)"
+                />
+            </div>
+        </div>
+        <div class="card-footer">
+            <button @click="onCopy" class="btn btn-primary">Copy</button>
         </div>
     </div>
 </template>
@@ -56,9 +47,7 @@ export default {
     destroyed() {
         this.unsubscribe();
     },
-    async mounted() {
-        this.$vs.loading({ container: '#customise-view', type: 'radius' });
-
+    async created() {
         this.unsubscribe = firebase
             .firestore()
             .collection('snippets')
@@ -84,8 +73,6 @@ export default {
                 } else {
                     this.snippet.copyCount = data.copyCount;
                 }
-
-                this.$vs.loading.close('#customise-view > .con-vs-loading');
             });
     },
     computed: {

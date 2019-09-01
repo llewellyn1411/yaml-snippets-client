@@ -1,52 +1,83 @@
 <template>
-    <div class="page edit" id="edit-view">
-        <v-form v-if="activeSnippet" v-model="valid" ref="form" lazy-validation>
-            <v-text-field v-model="activeSnippet.name" :counter="30" :rules="nameRules" label="Name" required clearable></v-text-field>
-            <v-textarea
-                v-model="activeSnippet.description"
-                :counter="500"
-                :rules="descriptionRules"
-                label="Description"
-                auto-grow
-            ></v-textarea>
-            <v-textarea v-model="activeSnippet.content" :counter="1000" :rules="contentRules" label="Dockerfile" auto-grow></v-textarea>
-            <v-btn :disabled="!valid" :loading="submitting" @click="submit">Edit</v-btn>
-        </v-form>
-    </div>
+    <section class="page-edit">
+        <h2>Edit Snippet</h2>
+        <form class="form-horizontal">
+            <InputText
+                name="Name"
+                placeholder="Name"
+                :tabIndex="5"
+                :maxlength="10"
+                :validator="validateName"
+                @state-change="onNameValidityChange"
+                v-model="name"
+            />
+            <InputText
+                name="Description"
+                placeholder="Description"
+                type="textarea"
+                :tabIndex="6"
+                :maxlength="500"
+                :validator="validateDescription"
+                @state-change="onDescriptionValidityChange"
+                v-model="description"
+            />
+            <InputText
+                name="Snippet"
+                placeholder="Snippet"
+                type="textarea"
+                :tabIndex="7"
+                :maxlength="1000"
+                :validator="validateSnippet"
+                @state-change="onSnippetValidityChange"
+                v-model="snippet"
+            />
+
+            <button
+                type="button"
+                class="btn btn-primary btn-block"
+                tabindex="8"
+                :class="{ loading: isEditBtnLoading }"
+                :disabled="!isFormValid"
+                @click="onSubmit"
+            >
+                Edit
+            </button>
+        </form>
+    </section>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import InputText from '../components/InputText';
 
 export default {
     name: 'SnippetEdit',
+    components: {
+        InputText
+    },
     data() {
         return {
+            snippetId: '',
             name: '',
             description: '',
-            content: '',
+            snippet: '',
             author: '',
             tags: [],
-            valid: false,
-            submitting: false,
-            loading: true,
-            nameRules: [
-                (v) => !!v || 'Name is required',
-                (v) => (v && v.length <= 30 && v.length >= 4) || 'Name must be between 4 and 30 characters'
-            ],
-            descriptionRules: [
-                (v) => !!v || 'Description is required',
-                (v) => (v && v.length <= 500 && v.length >= 10) || 'Description must be between 10 and 500 characters'
-            ],
-            contentRules: [
-                (v) => !!v || 'Content is required',
-                (v) => (v && v.length <= 1000 && v.length >= 10) || 'Dockerfile must be between 10 and 500 characters'
-            ]
+            isFormValid: false,
+            isEditBtnLoading: false,
+            errors: {
+                name: false,
+                description: false,
+                snippet: false
+            }
         };
     },
-    async mounted() {
-        this.$vs.loading({ container: '#edit-view', type: 'radius' });
-        await this.loadSnippet(this.id);
-        this.$vs.loading.close('#edit-view > .con-vs-loading');
+    async created() {
+        this.loadSnippet(this.id).then((payload) => {
+            this.snippetId = payload.id;
+            this.name = payload.name;
+            this.description = payload.description;
+            this.snippet = payload.content;
+        });
     },
     computed: {
         ...mapGetters('snippets', ['activeSnippet']),
@@ -56,13 +87,63 @@ export default {
     },
     methods: {
         ...mapActions('snippets', [`addSnippet`, `loadSnippet`, `editSnippet`]),
-        async submit() {
-            if (this.$refs.form.validate()) {
-                this.submitting = true;
+        validate() {
+            this.isFormValid = this.errors.name && this.errors.description && this.errors.snippet;
+        },
+        validateName(name) {
+            const isValid = name && name.length >= 4 && name.length <= 10;
+            return {
+                isValid,
+                message: isValid ? '' : 'Name must be more than 4 characters'
+            };
+        },
+        onNameValidityChange(payload) {
+            const { isValid, message } = payload;
 
-                await this.editSnippet(this.activeSnippet);
+            this.errors.name = isValid;
 
-                this.submitting = false;
+            this.validate();
+        },
+        validateDescription(description) {
+            const isValid = description && description.length >= 10 && description.length <= 500;
+            return {
+                isValid,
+                message: isValid ? '' : 'Description must be more than 10 characters'
+            };
+        },
+        onDescriptionValidityChange(payload) {
+            const { isValid, message } = payload;
+
+            this.errors.description = isValid;
+
+            this.validate();
+        },
+        validateSnippet(snippet) {
+            const isValid = snippet && snippet.length >= 10 && snippet.length <= 1000;
+            return {
+                isValid,
+                message: isValid ? '' : 'Snippet must be more than 10 characters'
+            };
+        },
+        onSnippetValidityChange(payload) {
+            const { isValid, message } = payload;
+
+            this.errors.snippet = isValid;
+
+            this.validate();
+        },
+        async onSubmit() {
+            if (this.isFormValid) {
+                this.isEditBtnLoading = true;
+
+                await this.editSnippet({
+                    id: this.snippetId,
+                    name: this.name,
+                    description: this.description,
+                    content: this.snippet
+                });
+
+                this.isEditBtnLoading = false;
 
                 this.$router.push('/');
             }
@@ -70,3 +151,15 @@ export default {
     }
 };
 </script>
+<style lang="scss">
+.page-edit {
+    width: 100%;
+}
+
+@media (min-width: 840px) {
+    .page-edit {
+        width: 50%;
+        margin: 0 auto;
+    }
+}
+</style>

@@ -21,11 +21,7 @@ export default {
         ...mapActions('snippets', [`loadSnippets`])
     },
     async mounted() {
-        this.$vs.loading({ container: '#home-view', type: 'radius' });
-
         await this.loadSnippets();
-
-        this.$vs.loading.close('#home-view > .con-vs-loading');
     }
 };
 </script>

@@ -30,3 +30,18 @@ export default {
     }
 };
 </script>
+<style lang="scss">
+.counter-container {
+    padding: 0 10px;
+    box-sizing: border-box;
+    text-align: right;
+
+    .counter-value {
+        font-weight: bold;
+    }
+
+    .counter-label {
+        text-transform: capitalize;
+    }
+}
+</style>

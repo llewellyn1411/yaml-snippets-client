@@ -52,6 +52,34 @@ html {
     width: 100%;
 }
 
+.heading {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px;
+
+    &::after {
+        content: ' ';
+        position: absolute;
+        height: 5px;
+        width: 150%;
+        bottom: 0;
+        left: 0;
+
+        background-color: $primary-color;
+        border-radius: 5px;
+
+        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#099cec+0,f8f9fa+100&1+0,0+100 */
+        background: -moz-linear-gradient(left, rgba(9, 156, 236, 1) 0%, rgba(248, 249, 250, 0) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left, rgba(9, 156, 236, 1) 0%, rgba(248, 249, 250, 0) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(
+            to right,
+            rgba(9, 156, 236, 1) 0%,
+            rgba(248, 249, 250, 0) 100%
+        ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#099cec', endColorstr='#00f8f9fa',GradientType=1 ); /* IE6-9 */
+    }
+}
+
 code {
     display: block;
     word-break: break-all !important;

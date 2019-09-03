@@ -1,31 +1,34 @@
 <template>
-    <div v-if="!loading" class="card page-customise">
-        <div class="card-header">
-            <div class="card-title">
-                <div class="title-section">
-                    <h5>{{ snippet.name }}</h5>
+    <section>
+        <h1 class="heading">Customize</h1>
+        <div v-if="!loading && snippet" class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="title-section">
+                        <h5>{{ snippet.name }}</h5>
+                    </div>
                 </div>
+                <div class="card-subtitle text-gray">{{ snippet.author.displayName }}</div>
             </div>
-            <div class="card-subtitle text-gray">{{ snippet.author.displayName }}</div>
-        </div>
-        <div class="card-body">
-            <div class="form-group" v-for="(item, index) in variables" :key="index">
-                <label class="form-label" :for="`input-${item.name}`">{{ item.name }}</label>
-                <input
-                    class="form-input"
-                    type="text"
-                    autocomplete="off"
-                    :id="`input-${item.name}`"
-                    :placeholder="item.name"
-                    @input="onValueChanged(index, $event)"
-                />
+            <div class="card-body">
+                <div class="form-group" v-for="(item, index) in variables" :key="index">
+                    <label class="form-label" :for="`input-${item.name}`">{{ item.name }}</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        autocomplete="off"
+                        :id="`input-${item.name}`"
+                        :placeholder="item.name"
+                        @input="onValueChanged(index, $event)"
+                    />
+                </div>
+                <code class="language-yaml" v-html="liveContent"></code>
             </div>
-            <code class="language-yaml" v-html="liveContent"></code>
+            <div class="card-footer">
+                <button @click="onCopy" class="btn btn-primary">Copy</button>
+            </div>
         </div>
-        <div class="card-footer">
-            <button @click="onCopy" class="btn btn-primary">Copy</button>
-        </div>
-    </div>
+    </section>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';

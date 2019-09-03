@@ -1,8 +1,10 @@
 <template>
-    <div class="auth">
-        <h1>Welcome</h1>
-        <div id="auth-container"></div>
-    </div>
+    <section>
+        <h1 class="heading">Welcome</h1>
+        <div class="auth card">
+            <div id="auth-container"></div>
+        </div>
+    </section>
 </template>
 
 <script>

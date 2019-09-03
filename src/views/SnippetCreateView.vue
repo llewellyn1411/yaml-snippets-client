@@ -1,48 +1,52 @@
 <template>
     <section class="page-create">
-        <h2>Create Snippet</h2>
-        <form class="form-horizontal">
-            <InputText
-                name="Name"
-                placeholder="Name"
-                :tabIndex="5"
-                :maxlength="10"
-                :validator="validateName"
-                @state-change="onNameValidityChange"
-                v-model="name"
-            />
-            <InputText
-                name="Description"
-                placeholder="Description"
-                type="textarea"
-                :tabIndex="6"
-                :maxlength="500"
-                :validator="validateDescription"
-                @state-change="onDescriptionValidityChange"
-                v-model="description"
-            />
-            <InputText
-                name="Snippet"
-                placeholder="Snippet"
-                type="textarea"
-                :tabIndex="7"
-                :maxlength="1000"
-                :validator="validateSnippet"
-                @state-change="onSnippetValidityChange"
-                v-model="snippet"
-            />
+        <h1 class="heading">Create</h1>
+        <div class="card">
+            <div class="card-body">
+                <form class="form-horizontal">
+                    <InputText
+                        name="Name"
+                        placeholder="Name"
+                        :tabIndex="5"
+                        :maxlength="10"
+                        :validator="validateName"
+                        @state-change="onNameValidityChange"
+                        v-model="name"
+                    />
+                    <InputText
+                        name="Description"
+                        placeholder="Description"
+                        type="textarea"
+                        :tabIndex="6"
+                        :maxlength="500"
+                        :validator="validateDescription"
+                        @state-change="onDescriptionValidityChange"
+                        v-model="description"
+                    />
+                    <InputText
+                        name="Snippet"
+                        placeholder="Snippet"
+                        type="textarea"
+                        :tabIndex="7"
+                        :maxlength="1000"
+                        :validator="validateSnippet"
+                        @state-change="onSnippetValidityChange"
+                        v-model="snippet"
+                    />
 
-            <button
-                type="button"
-                class="btn btn-primary btn-block"
-                tabindex="8"
-                :class="{ loading: isSubmitBtnLoading }"
-                :disabled="!isValidForm"
-                @click="onSubmit"
-            >
-                Create
-            </button>
-        </form>
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-block"
+                        tabindex="8"
+                        :class="{ loading: isSubmitBtnLoading }"
+                        :disabled="!isValidForm"
+                        @click="onSubmit"
+                    >
+                        Create
+                    </button>
+                </form>
+            </div>
+        </div>
     </section>
 </template>
 <script>

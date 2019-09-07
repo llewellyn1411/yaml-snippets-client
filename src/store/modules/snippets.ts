@@ -61,7 +61,7 @@ export default {
                 } );
 
                 if ( state.snippetList[ index ] ) {
-                    state.snippetList[ index ].copyCount++;
+                    state.snippetList[ index ].countCopy++;
                 }
             }
         },
@@ -135,8 +135,8 @@ export default {
                     content: snippet.content,
                     description: snippet.description,
                     tags: snippet.tags,
-                    copyCount: snippet.copyCount,
-                    starCount: snippet.starCount,
+                    countCopy: snippet.countCopy,
+                    countStar: snippet.countStar,
                     author: {
                         uid,
                         displayName
@@ -164,7 +164,7 @@ export default {
         },
         incrementSnippetCopies( { commit }: Store<State>, snippetId: string ) {
             return firebase.firestore().collection( 'snippets' ).doc( snippetId )
-                .update( { copyCount: increment } ).then( () => {
+                .update( { countCopy: increment } ).then( () => {
                     commit( 'incrementSnippetCopies', snippetId );
                 } );
         },

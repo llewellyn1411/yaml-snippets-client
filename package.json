@@ -11,6 +11,7 @@
         "encrypt:env": "gcloud kms encrypt --plaintext-file=.env --ciphertext-file=.env.enc --location=global --keyring=yaml-snippets --key=yaml-snippets-env"
     },
     "dependencies": {
+        "algoliasearch": "^3.34.0",
         "core-js": "^3.1.4",
         "firebase": "^6.3.0",
         "firebaseui": "^4.1.0",
@@ -23,6 +24,7 @@
         "vuex": "^3.1.1"
     },
     "devDependencies": {
+        "@types/algoliasearch": "^3.30.18",
         "@types/jest": "^24.0.15",
         "@types/node": "^12.6.5",
         "@vue/cli-plugin-babel": "^3.9.2",

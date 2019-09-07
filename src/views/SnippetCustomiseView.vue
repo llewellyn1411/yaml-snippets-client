@@ -78,7 +78,7 @@ export default {
                         };
                     });
                 } else {
-                    this.snippet.copyCount = data.copyCount;
+                    this.snippet.countCopy = data.countCopy;
                 }
             });
     },

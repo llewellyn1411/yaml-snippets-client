@@ -4,8 +4,8 @@ export default interface Snippet {
     content: string;
     description: string;
     tags: string[];
-    copyCount: number;
-    starCount: number;
+    countCopy: number;
+    countStar: number;
     author?: {
         uid: string;
         displayName?: string | null;

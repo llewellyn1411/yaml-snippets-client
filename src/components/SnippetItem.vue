@@ -7,8 +7,8 @@
                     <div v-if="isLoggedIn" class="star" :class="{ isActive: starred }" @click="toggleStar"></div>
                 </div>
                 <div class="counter-section">
-                    <Counter label="copies" :value="copyCount" />
-                    <Counter label="stars" :value="starCount" />
+                    <Counter label="copies" :value="countCopy" />
+                    <Counter label="stars" :value="countStar" />
                 </div>
             </div>
             <div class="card-subtitle text-gray">{{ author }}</div>
@@ -42,8 +42,8 @@ export default {
         authorId: String,
         content: String,
         description: String,
-        copyCount: Number,
-        starCount: Number,
+        countCopy: Number,
+        countStar: Number,
         editable: Boolean,
         starred: Boolean,
         isLoggedIn: Boolean

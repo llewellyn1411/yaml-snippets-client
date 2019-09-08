@@ -1,9 +1,13 @@
 import firebase from 'firebase/app';
+import algoliasearch from 'algoliasearch/lite';
 import { Store } from 'vuex';
 import Snippet from '../../interfaces/Snippet';
 
 interface State {
-    snippetList?: Snippet[];
+    snippetsInView?: Snippet[];
+    snippetQuery: string;
+    totalPages: number;
+    currentPage: number;
     starredSnippetIds: string[];
 }
 
@@ -12,56 +16,76 @@ interface EditStarPayload {
     snippetId: string;
 }
 
+interface SearchPayload {
+    query: string;
+    page: number;
+}
+
 const defaultState: State = {
-    snippetList: undefined,
+    snippetsInView: undefined,
+    snippetQuery: '',
+    totalPages: 0,
+    currentPage: 0,
     starredSnippetIds: []
 };
 
 const increment = firebase.firestore.FieldValue.increment( 1 );
 
+const searchClient = algoliasearch( process.env.VUE_APP_ALGOLIA_APP_ID, process.env.VUE_APP_ALGOLIA_SEARCH_API_KEY );
+const snippetIndex = searchClient.initIndex( 'snippets' );
+
 export default {
     namespaced: true,
     state: defaultState,
     mutations: {
-        updateSnippets( state: State, newSnippets: Snippet[] ) {
-            state.snippetList = newSnippets;
+        setSnippetQuery( state: State, query: string ) {
+            state.snippetQuery = query;
+        },
+        setSnippetsInView( state: State, newSnippets: Snippet[] ) {
+            state.snippetsInView = newSnippets;
+        },
+        setTotalPages( state: State, totalPages: number ) {
+            state.totalPages = totalPages;
+        },
+        setCurrentPage( state: State, currentPage: number ) {
+            state.currentPage = currentPage + 1;
         },
         appendSnippetToList( state: State, snippet: Snippet ) {
-            if ( state.snippetList && snippet ) {
-                state.snippetList.push( snippet );
+            if ( state.snippetsInView && snippet ) {
+                state.snippetsInView.push( snippet );
             }
         },
         removeSnippetFromList( state: State, id: string ) {
-            if ( state.snippetList ) {
-                const index = state.snippetList.findIndex( ( snippet ) => {
+            if ( state.snippetsInView ) {
+                const index = state.snippetsInView.findIndex( ( snippet ) => {
                     return snippet.id === id;
                 } );
 
                 if ( index !== -1 ) {
-                    state.snippetList.splice( index, 1 );
+                    state.snippetsInView.splice( index, 1 );
                 }
             }
         },
         updateSnippet( state: State, targetSnippet: Snippet ) {
-            if ( state.snippetList ) {
-                const index = state.snippetList.findIndex( ( snippet ) => {
+            if ( state.snippetsInView ) {
+                const index = state.snippetsInView.findIndex( ( snippet ) => {
                     return snippet.id === targetSnippet.id;
                 } );
 
-                const oldSnippet = state.snippetList[ index ];
+                const oldSnippet = state.snippetsInView[ index ];
                 if ( oldSnippet ) {
-                    state.snippetList[ index ] = Object.assign( oldSnippet, targetSnippet );
+                    state.snippetsInView[ index ] = Object.assign( oldSnippet, targetSnippet );
                 }
             }
         },
         incrementSnippetCopies( state: State, id: string ) {
-            if ( state.snippetList ) {
-                const index = state.snippetList.findIndex( ( snippet ) => {
+            if ( state.snippetsInView ) {
+                const index = state.snippetsInView.findIndex( ( snippet ) => {
                     return snippet.id === id;
                 } );
 
-                if ( state.snippetList[ index ] ) {
-                    state.snippetList[ index ].countCopy++;
+                if ( state.snippetsInView[ index ] ) {
+                    state.snippetsInView[ index ].countCopy++;
                 }
             }
         },
@@ -87,19 +111,22 @@ export default {
                     commit( 'updateStarredSnippets', starredSnippetIds );
                 } );
         },
-        loadSnippets( { commit }: Store<State> ) {
-            return firebase.firestore().collection( 'snippets' ).limit( 10 ).get()
-                .then( ( querySnapShot ) => {
-                    const payload = querySnapShot.docs.map( ( doc ) => {
-                        const data = doc.data();
-                        return {
-                            id: doc.id,
-                            ...data
-                        };
-                    } );
-
-                    commit( 'updateSnippets', payload );
-                } );
+        loadSnippets( { commit, state }: Store<State> ) {
+            return snippetIndex.search( { query: state.snippetQuery } ).then( ( result ) => {
+                commit( 'setSnippetsInView', result.hits );
+                commit( 'setTotalPages', result.nbPages );
+                commit( 'setCurrentPage', result.page );
+            } );
+        },
+        searchSnippets( { commit }: Store<State>, searchPayload: SearchPayload ) {
+            const query = searchPayload.query;
+            const page = searchPayload.page - 1;
+            return snippetIndex.search( { query, page } ).then( ( result ) => {
+                commit( 'setSnippetQuery', query );
+                commit( 'setSnippetsInView', result.hits );
+                commit( 'setTotalPages', result.nbPages );
+                commit( 'setCurrentPage', result.page );
+            } );
         },
         loadSnippet( { commit }: Store<State>, id: string ) {
             return firebase.firestore().collection( 'snippets' ).doc( id ).get()
@@ -185,11 +212,20 @@ export default {
         }
     },
     getters: {
-        snippetList( state: State ) {
-            return state.snippetList;
+        snippetsInView( state: State ) {
+            return state.snippetsInView;
+        },
+        snippetQuery( state: State ) {
+            return state.snippetQuery;
         },
         starredSnippetIds( state: State ) {
             return state.starredSnippetIds;
+        },
+        totalPages( state: State ) {
+            return state.totalPages;
+        },
+        currentPage( state: State ) {
+            return state.currentPage;
         }
     }
 };

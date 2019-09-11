@@ -66,7 +66,7 @@ export default {
             snippet: '',
             author: '',
             tags: [],
-            isFormValid: false,
+            isFormValid: true,
             isEditBtnLoading: false,
             errors: {
                 name: false,

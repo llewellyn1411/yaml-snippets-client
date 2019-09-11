@@ -1,5 +1,9 @@
 <template>
     <div class="page home" id="home-view">
+        <div class="has-icon-right mb-2">
+            <input type="text" class="form-input" placeholder="Search Snippets" v-model="searchQuery" />
+            <i class="form-icon" :class="{ loading: isSearching }"></i>
+        </div>
         <SnippetList v-if="snippetsInView" :snippets="snippetsInView" :uid="uid" :isLoggedIn="isUserLoggedIn" />
         <ul class="pagination">
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -17,12 +21,19 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
+import { debounce } from 'lodash';
 import SnippetList from '@/components/SnippetList';
 
 export default {
     name: 'HomeView',
     components: {
         SnippetList
+    },
+    data() {
+        return {
+            isSearching: false,
+            searchQuery: ''
+        };
     },
     computed: {
         ...mapGetters('snippets', ['snippetsInView', 'snippetQuery', 'totalPages', 'currentPage']),
@@ -38,6 +49,17 @@ export default {
         },
         navigateToNextPage() {
             this.searchSnippets({ query: this.snippetQuery, page: this.currentPage + 1 });
+        },
+        debounceSearch: debounce(function() {
+            this.searchSnippets({ query: this.searchQuery, page: 1 }).then(() => {
+                this.isSearching = false;
+            });
+        }, 500)
+    },
+    watch: {
+        searchQuery() {
+            this.isSearching = true;
+            this.debounceSearch();
         }
     },
     async mounted() {

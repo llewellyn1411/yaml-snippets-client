@@ -138,7 +138,7 @@ export default {
         async onSubmit() {
             if (this.isFormValid) {
                 this.isEditBtnLoading = true;
-
+                // TODO: Honey pot
                 await this.updateSnippet({
                     id: this.snippetId,
                     name: this.name,

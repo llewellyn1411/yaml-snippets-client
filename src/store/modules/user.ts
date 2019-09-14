@@ -3,6 +3,7 @@ import { Store } from 'vuex';
 
 interface State {
     isLoggedIn: boolean;
+    firstLogin: boolean;
     displayName?: string;
     email?: string;
     uid?: string;
@@ -10,6 +11,7 @@ interface State {
 
 const defaultState: State = {
     isLoggedIn: false,
+    firstLogin: false,
     uid: undefined,
     email: undefined,
     displayName: undefined

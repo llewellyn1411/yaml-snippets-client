@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex, { StoreOptions, ModuleTree } from 'vuex';
 import snippets from './modules/snippets';
 import user from './modules/user';
+import notification from './modules/notification';
 
 Vue.use( Vuex );
 interface State {
@@ -16,7 +17,8 @@ const defaultState: State = {
 
 const modules: any = {
   snippets,
-  user
+  user,
+  notification
 };
 
 const store: StoreOptions<State> = {

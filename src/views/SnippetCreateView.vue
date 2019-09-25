@@ -63,7 +63,6 @@ export default {
             description: '',
             snippet: '',
             author: '',
-            tags: [],
             isValidForm: false,
             isSubmitBtnLoading: false,
             errors: {
@@ -75,6 +74,7 @@ export default {
     },
     methods: {
         ...mapActions('snippets', ['createSnippet']),
+        ...mapActions('notification', ['showNotification', 'hideNotification']),
         validate() {
             this.isValidForm = this.errors.name && this.errors.description && this.errors.snippet;
         },
@@ -123,13 +123,22 @@ export default {
         async onSubmit() {
             if (this.isValidForm) {
                 this.isSubmitBtnLoading = true;
-                await this.createSnippet({
-                    name: this.name,
-                    description: this.description,
-                    content: this.snippet
-                });
+
+                try {
+                    await this.createSnippet({
+                        name: this.name,
+                        description: this.description,
+                        content: this.snippet
+                    });
+                } catch (e) {
+                    this.isValidForm = false;
+                    this.showNotification({
+                        title: 'Unable to create new snippet',
+                        message: e,
+                        type: 'error'
+                    });
+                }
                 this.isSubmitBtnLoading = false;
-                this.$router.push('/');
             }
         }
     }

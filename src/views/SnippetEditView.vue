@@ -65,7 +65,6 @@ export default {
             description: '',
             snippet: '',
             author: '',
-            tags: [],
             isFormValid: true,
             isEditBtnLoading: false,
             errors: {

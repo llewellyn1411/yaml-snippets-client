@@ -3,7 +3,6 @@ export default interface Snippet {
     name: string;
     content: string;
     description: string;
-    tags: string[];
     countCopy: number;
     countStar: number;
     author?: {

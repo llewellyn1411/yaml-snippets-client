@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         ...mapActions('user', [`signOut`]),
-        ...mapActions('notification', ['showNotification', 'hideNotification']),
+        ...mapActions('notification', ['hideNotification']),
         async onSignOut() {
             await this.signOut();
             this.$router.push('/');
@@ -40,20 +40,6 @@ export default {
         ...mapGetters('notification', ['notification']),
         ...mapState('user', ['isLoggedIn']),
         ...mapState(['isAppReady'])
-    },
-    data() {
-        return {
-            showToast: false
-        };
-    },
-    created() {
-        setTimeout(() => {
-            this.showNotification({
-                title: 'Test',
-                message: 'Message',
-                type: 'success'
-            });
-        }, 3000);
     }
 };
 </script>

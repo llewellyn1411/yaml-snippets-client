@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import algoliasearch from 'algoliasearch/lite';
 import { Store } from 'vuex';
 import Snippet from '../../interfaces/Snippet';
+import createSnippet from '../../functions/createSnippet';
 
 interface State {
     snippetsInView?: Snippet[];
@@ -49,11 +50,6 @@ export default {
         },
         setCurrentPage( state: State, currentPage: number ) {
             state.currentPage = currentPage + 1;
-        },
-        appendSnippetToList( state: State, snippet: Snippet ) {
-            if ( state.snippetsInView && snippet ) {
-                state.snippetsInView.push( snippet );
-            }
         },
         removeSnippetFromList( state: State, id: string ) {
             if ( state.snippetsInView ) {
@@ -141,36 +137,17 @@ export default {
                     return payload;
                 } );
         },
-        createSnippet( { commit }: Store<State>, snippet: Snippet ) {
-            // TODO: Validate
+        createSnippet( store: Store<State>, snippet: Snippet ) {
             const currentUser = firebase.auth().currentUser;
             const uid = currentUser!.uid;
             const displayName = currentUser!.displayName;
 
-            return firebase.firestore().collection( 'snippets' ).add( {
-                ...snippet,
-                author: {
-                    uid,
-                    displayName
-                }
-            } ).then( ( doc ) => {
-                return doc.get();
-            } ).then( ( doc ) => {
-                const payload: Snippet = {
-                    id: doc.id,
-                    name: snippet.name,
-                    content: snippet.content,
-                    description: snippet.description,
-                    tags: snippet.tags,
-                    countCopy: snippet.countCopy,
-                    countStar: snippet.countStar,
-                    author: {
-                        uid,
-                        displayName
-                    }
-                };
-
-                commit( 'appendSnippetToList', payload );
+            return createSnippet( {
+                userDisplayName: displayName || '',
+                userId: uid,
+                name: snippet.name,
+                description: snippet.description,
+                content: snippet.content
             } );
         },
         removeSnippet( { commit }: Store<State>, id: string ) {

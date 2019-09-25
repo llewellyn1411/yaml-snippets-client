@@ -1,8 +1,14 @@
-import firebase from 'firebase/app';
 import algoliasearch from 'algoliasearch/lite';
 import { Store } from 'vuex';
 import Snippet from '../../interfaces/Snippet';
-import createSnippet from '../../functions/createSnippet';
+import getUserDetails from '../../functions/getUserDetails';
+import getStarredSnippetIds from '../../functions/getStarredSnippetIds';
+import snippetCreate from '../../functions/snippetCreate';
+import snippetFetch from '../../functions/snippetFetch';
+import snippetDelete from '../../functions/snippetDelete';
+import snippetUpdate from '../../functions/snippetUpdate';
+import snippetAddStar from '../../functions/snippetAddStar';
+import snippetRemoveStar from '../../functions/snippetRemoveStar';
 
 interface State {
     snippetsInView?: Snippet[];
@@ -29,8 +35,6 @@ const defaultState: State = {
     currentPage: 0,
     starredSnippetIds: []
 };
-
-const increment = firebase.firestore.FieldValue.increment( 1 );
 
 const searchClient = algoliasearch( process.env.VUE_APP_ALGOLIA_APP_ID, process.env.VUE_APP_ALGOLIA_SEARCH_API_KEY );
 const snippetIndex = searchClient.initIndex( 'snippets' );
@@ -74,17 +78,6 @@ export default {
                 }
             }
         },
-        incrementSnippetCopies( state: State, id: string ) {
-            if ( state.snippetsInView ) {
-                const index = state.snippetsInView.findIndex( ( snippet ) => {
-                    return snippet.id === id;
-                } );
-
-                if ( state.snippetsInView[ index ] ) {
-                    state.snippetsInView[ index ].countCopy++;
-                }
-            }
-        },
         updateStarredSnippets( state: State, starredSnippetIds: string[] ) {
             state.starredSnippetIds = starredSnippetIds;
         },
@@ -100,92 +93,79 @@ export default {
     },
     actions: {
         loadStarredSnippets( { commit }: Store<State>, uid: string ) {
-            return firebase.firestore().collection( 'stars' )
-                .where( 'userId', '==', uid ).get()
-                .then( ( querySnapShot ) => {
-                    const starredSnippetIds = querySnapShot.docs.map( ( doc ) => doc.data().snippetId );
+            return getStarredSnippetIds( uid )
+                .then( ( starredSnippetIds ) => {
                     commit( 'updateStarredSnippets', starredSnippetIds );
                 } );
         },
         loadSnippets( { commit, state }: Store<State> ) {
-            return snippetIndex.search( { query: state.snippetQuery } ).then( ( result ) => {
-                commit( 'setSnippetsInView', result.hits );
-                commit( 'setTotalPages', result.nbPages );
-                commit( 'setCurrentPage', result.page );
-            } );
+            return snippetIndex
+                .search( { query: state.snippetQuery } )
+                .then( ( result ) => {
+                    commit( 'setSnippetsInView', result.hits );
+                    commit( 'setTotalPages', result.nbPages );
+                    commit( 'setCurrentPage', result.page );
+                } );
         },
         searchSnippets( { commit }: Store<State>, searchPayload: SearchPayload ) {
             const query = searchPayload.query;
             const page = searchPayload.page - 1;
-            return snippetIndex.search( { query, page } ).then( ( result ) => {
-                commit( 'setSnippetQuery', query );
-                commit( 'setSnippetsInView', result.hits );
-                commit( 'setTotalPages', result.nbPages );
-                commit( 'setCurrentPage', result.page );
-            } );
-        },
-        loadSnippet( { commit }: Store<State>, id: string ) {
-            return firebase.firestore().collection( 'snippets' ).doc( id ).get()
-                .then( ( doc ) => {
-                    const data = doc.data();
-
-                    const payload = {
-                        id: doc.id,
-                        ...data
-                    };
-
-                    return payload;
+            return snippetIndex
+                .search( { query, page } )
+                .then( ( result ) => {
+                    commit( 'setSnippetQuery', query );
+                    commit( 'setSnippetsInView', result.hits );
+                    commit( 'setTotalPages', result.nbPages );
+                    commit( 'setCurrentPage', result.page );
                 } );
         },
+        loadSnippet( { commit }: Store<State>, id: string ) {
+            return snippetFetch( id );
+        },
         createSnippet( store: Store<State>, snippet: Snippet ) {
-            const currentUser = firebase.auth().currentUser;
-            const uid = currentUser!.uid;
-            const displayName = currentUser!.displayName;
+            const currentUser = getUserDetails();
+            if ( currentUser ) {
+                const { uid, displayName } = currentUser;
 
-            return createSnippet( {
-                userDisplayName: displayName || '',
-                userId: uid,
-                name: snippet.name,
-                description: snippet.description,
-                content: snippet.content
-            } );
+                return snippetCreate( {
+                    userDisplayName: displayName || '',
+                    userId: uid,
+                    name: snippet.name,
+                    description: snippet.description,
+                    content: snippet.content
+                } );
+            }
         },
         removeSnippet( { commit }: Store<State>, id: string ) {
-            return firebase.firestore().collection( 'snippets' ).doc( id ).delete()
+            return snippetDelete( id )
                 .then( () => {
                     commit( 'removeSnippetFromList', id );
                 } );
         },
         updateSnippet( { commit }: Store<State>, snippet: Snippet ) {
-            // TODO: Validate
-            return firebase.firestore().collection( 'snippets' ).doc( snippet.id ).update( {
-                name: snippet.name,
-                content: snippet.content,
-                description: snippet.description
-            } ).then( () => {
-                commit( 'updateSnippet', snippet );
-            } );
-        },
-        incrementSnippetCopies( { commit }: Store<State>, snippetId: string ) {
-            return firebase.firestore().collection( 'snippets' ).doc( snippetId )
-                .update( { countCopy: increment } ).then( () => {
-                    commit( 'incrementSnippetCopies', snippetId );
+            if ( snippet && snippet.id ) {
+                return snippetUpdate( snippet.id, {
+                    name: snippet.name,
+                    content: snippet.content,
+                    description: snippet.description
+                } ).then( () => {
+                    commit( 'updateSnippet', snippet );
                 } );
+            }
         },
         addStar( { commit }: Store<State>, payload: EditStarPayload ) {
             const { userId, snippetId } = payload;
-            return firebase.firestore().collection( 'stars' ).doc( `${ userId }_${ snippetId }` ).set( {
-                userId,
-                snippetId
-            } ).then( () => {
-                commit( 'addStar', snippetId );
-            } );
+            return snippetAddStar( userId, snippetId )
+                .then( () => {
+                    commit( 'addStar', snippetId );
+                } );
         },
         removeStar( { commit }: Store<State>, payload: EditStarPayload ) {
             const { userId, snippetId } = payload;
-            return firebase.firestore().collection( 'stars' ).doc( `${ userId }_${ snippetId }` ).delete().then( () => {
-                commit( 'removeStar', snippetId );
-            } );
+            return snippetRemoveStar( userId, snippetId )
+                .then( () => {
+                    commit( 'removeStar', snippetId );
+                } );
         }
     },
     getters: {

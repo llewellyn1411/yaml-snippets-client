@@ -77,8 +77,6 @@ export default {
                             value: variable[2]
                         };
                     });
-                } else {
-                    this.snippet.countCopy = data.countCopy;
                 }
             });
     },
@@ -98,15 +96,11 @@ export default {
         }
     },
     methods: {
-        ...mapActions('snippets', ['incrementSnippetCopies']),
         onValueChanged(index, value) {
             this.variables.splice(index, 1, Object.assign(this.variables[index], { value: value.target.value }));
         },
         async onCopy() {
-            this.$copyText(this.liveContent).then(() => {
-                // TODO: Show copied message
-                this.incrementSnippetCopies(this.snippet.id);
-            });
+            this.$copyText(this.liveContent);
         }
     }
 };

@@ -9,7 +9,6 @@
             :authorId="snippet.author.uid"
             :description="snippet.description"
             :content="snippet.content"
-            :countCopy="snippet.countCopy"
             :countStar="snippet.countStar"
             :editable="snippet.author.uid === uid"
             :starred="starredSnippetIds.includes(snippet.objectID)"

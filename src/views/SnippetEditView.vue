@@ -8,7 +8,7 @@
                         name="Name"
                         placeholder="Name"
                         :tabIndex="5"
-                        :maxlength="10"
+                        :maxlength="20"
                         :validator="validateName"
                         @state-change="onNameValidityChange"
                         v-model="name"
@@ -68,9 +68,9 @@ export default {
             isFormValid: true,
             isEditBtnLoading: false,
             errors: {
-                name: false,
-                description: false,
-                snippet: false
+                name: true,
+                description: true,
+                snippet: true
             }
         };
     },
@@ -89,14 +89,15 @@ export default {
     },
     methods: {
         ...mapActions('snippets', [`loadSnippet`, `updateSnippet`]),
+        ...mapActions('notification', ['showNotification']),
         validate() {
             this.isFormValid = this.errors.name && this.errors.description && this.errors.snippet;
         },
         validateName(name) {
-            const isValid = name && name.length >= 4 && name.length <= 10;
+            const isValid = name && name.length >= 5 && name.length <= 20;
             return {
                 isValid,
-                message: isValid ? '' : 'Name must be more than 4 characters'
+                message: isValid ? '' : 'Name must be more than 5 characters'
             };
         },
         onNameValidityChange(payload) {
@@ -121,10 +122,10 @@ export default {
             this.validate();
         },
         validateSnippet(snippet) {
-            const isValid = snippet && snippet.length >= 10 && snippet.length <= 1000;
+            const isValid = snippet && snippet.length >= 5 && snippet.length <= 1000;
             return {
                 isValid,
-                message: isValid ? '' : 'Snippet must be more than 10 characters'
+                message: isValid ? '' : 'Snippet must be more than 5 characters'
             };
         },
         onSnippetValidityChange(payload) {
@@ -137,17 +138,30 @@ export default {
         async onSubmit() {
             if (this.isFormValid) {
                 this.isEditBtnLoading = true;
-                // TODO: Honey pot
-                await this.updateSnippet({
-                    id: this.snippetId,
-                    name: this.name,
-                    description: this.description,
-                    content: this.snippet
-                });
+
+                try {
+                    // TODO: Honey pot
+                    await this.updateSnippet({
+                        id: this.snippetId,
+                        name: this.name,
+                        description: this.description,
+                        content: this.snippet
+                    });
+                    this.showNotification({
+                        title: 'Snippet Updated',
+                        message: '',
+                        type: 'success'
+                    });
+                } catch (e) {
+                    this.isFormValid = false;
+                    this.showNotification({
+                        title: 'Unable to update',
+                        message: e,
+                        type: 'error'
+                    });
+                }
 
                 this.isEditBtnLoading = false;
-
-                this.$router.push('/');
             }
         }
     }

@@ -53,14 +53,24 @@ export default {
     },
     methods: {
         ...mapActions('snippets', ['removeSnippet', 'addStar', 'removeStar']),
+        ...mapActions('notification', ['showNotification']),
         async toggleStar() {
             if (!this.isStarActionPending) {
                 this.isStarActionPending = true;
-                if (!this.starred) {
-                    await this.addStar({ userId: this.uid, snippetId: this.id });
-                } else {
-                    await this.removeStar({ userId: this.uid, snippetId: this.id });
+                try {
+                    if (!this.starred) {
+                        await this.addStar({ userId: this.uid, snippetId: this.id });
+                    } else {
+                        await this.removeStar({ userId: this.uid, snippetId: this.id });
+                    }
+                } catch (e) {
+                    this.showNotification({
+                        title: 'Error',
+                        message: 'Unable to perform star action',
+                        type: 'error'
+                    });
                 }
+
                 this.isStarActionPending = false;
             }
         }

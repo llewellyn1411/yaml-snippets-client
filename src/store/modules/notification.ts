@@ -38,13 +38,17 @@ export default {
         }
     },
     actions: {
-        showNotification( { commit }: Store<State>, notificationPayload: Notification ) {
+        showNotification( { commit, dispatch }: Store<State>, notificationPayload: Notification ) {
             commit( 'setActiveState', true );
             commit( 'setTitle', notificationPayload.title );
             commit( 'setMessage', notificationPayload.message );
             commit( 'setType', notificationPayload.type );
+
+            setTimeout( () => {
+                dispatch( 'hideNotification' );
+            }, 2000 );
         },
-        hideNotification( { commit }: Store<State>, notificationPayload: Notification ) {
+        hideNotification( { commit }: Store<State> ) {
             commit( 'setActiveState', false );
             commit( 'setTitle', '' );
             commit( 'setMessage', '' );

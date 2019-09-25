@@ -1,5 +1,5 @@
-import firebase from 'firebase/app';
 import { Store } from 'vuex';
+import signOut from '../../functions/signOut';
 
 interface State {
     isLoggedIn: boolean;
@@ -53,13 +53,10 @@ export default {
             commit( 'setUserId', id );
         },
         signOut( { commit }: Store<State> ) {
-            return firebase.auth().signOut()
+            return signOut()
                 .then( () => {
                     commit( 'setLoggedInStatus', false );
                     commit( 'clearUserDetails' );
-                } )
-                .catch( () => {
-                    // TODO: Handle error
                 } );
         }
     },

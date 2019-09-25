@@ -6,7 +6,7 @@
         >
             <button class="btn btn-clear float-right" @click="hide"></button>
             <h5>{{ title }}</h5>
-            <p>{{ message }}</p>
+            <p v-if="message">{{ message }}</p>
         </div>
     </div>
 </template>

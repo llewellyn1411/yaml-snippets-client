@@ -1,8 +1,8 @@
-import algoliasearch from 'algoliasearch/lite';
 import { Store } from 'vuex';
 import Snippet from '../../interfaces/Snippet';
 import getUserDetails from '../../functions/getUserDetails';
 import getStarredSnippetIds from '../../functions/getStarredSnippetIds';
+import snippetsSearch from '../../functions/snippetsSearch';
 import snippetCreate from '../../functions/snippetCreate';
 import snippetFetch from '../../functions/snippetFetch';
 import snippetDelete from '../../functions/snippetDelete';
@@ -35,9 +35,6 @@ const defaultState: State = {
     currentPage: 0,
     starredSnippetIds: []
 };
-
-const searchClient = algoliasearch( process.env.VUE_APP_ALGOLIA_APP_ID, process.env.VUE_APP_ALGOLIA_SEARCH_API_KEY );
-const snippetIndex = searchClient.initIndex( 'snippets' );
 
 export default {
     namespaced: true,
@@ -99,24 +96,22 @@ export default {
                 } );
         },
         loadSnippets( { commit, state }: Store<State> ) {
-            return snippetIndex
-                .search( { query: state.snippetQuery } )
-                .then( ( result ) => {
-                    commit( 'setSnippetsInView', result.hits );
-                    commit( 'setTotalPages', result.nbPages );
-                    commit( 'setCurrentPage', result.page );
+            return snippetsSearch( state.snippetQuery )
+                .then( ( payload ) => {
+                    commit( 'setSnippetsInView', payload.results );
+                    commit( 'setTotalPages', payload.pages );
+                    commit( 'setCurrentPage', payload.page );
                 } );
         },
         searchSnippets( { commit }: Store<State>, searchPayload: SearchPayload ) {
             const query = searchPayload.query;
             const page = searchPayload.page - 1;
-            return snippetIndex
-                .search( { query, page } )
-                .then( ( result ) => {
+            return snippetsSearch( query, page )
+                .then( ( payload ) => {
                     commit( 'setSnippetQuery', query );
-                    commit( 'setSnippetsInView', result.hits );
-                    commit( 'setTotalPages', result.nbPages );
-                    commit( 'setCurrentPage', result.page );
+                    commit( 'setSnippetsInView', payload.results );
+                    commit( 'setTotalPages', payload.pages );
+                    commit( 'setCurrentPage', payload.page );
                 } );
         },
         loadSnippet( { commit }: Store<State>, id: string ) {

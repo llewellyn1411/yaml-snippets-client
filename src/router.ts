@@ -2,13 +2,10 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import HomeView from './views/HomeView.vue';
 import SignInView from './views/SignInView.vue';
-import SnippetCustomiseView from './views/SnippetCustomiseView.vue';
-import SnippetEditView from './views/SnippetEditView.vue';
 import store from './store/index';
 
 Vue.use( Router );
 
-// TODO: Lazy loading
 export default new Router( {
   mode: 'history',
   base: process.env.BASE_URL,

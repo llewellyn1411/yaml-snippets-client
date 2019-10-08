@@ -1,10 +1,20 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import firebase from './firebase';
 import HomeView from './views/HomeView.vue';
 import SignInView from './views/SignInView.vue';
-import store from './store/index';
 
 Vue.use( Router );
+
+const isUserLoggedIn = ( to: object, from: object, next: ( ...args: any[] ) => void ) => {
+  firebase.auth().onAuthStateChanged( ( user ) => {
+    if ( user ) {
+      next();
+    } else {
+      next( false );
+    }
+  } );
+};
 
 export default new Router( {
   mode: 'history',
@@ -24,13 +34,7 @@ export default new Router( {
       path: '/snippet/create',
       name: 'snippet-create',
       component: () => import( './views/SnippetCreateView.vue' ),
-      beforeEnter: ( to, from, next ) => {
-        if ( store.getters[ 'user/isUserLoggedIn' ] ) {
-          next();
-        }
-
-        next( false );
-      }
+      beforeEnter: isUserLoggedIn
     },
     {
       path: '/snippet/:id',
@@ -41,13 +45,7 @@ export default new Router( {
       path: '/snippet/edit/:id',
       name: 'snippet-edit',
       component: () => import( './views/SnippetEditView.vue' ),
-      beforeEnter: ( to, from, next ) => {
-        if ( store.getters[ 'user/isUserLoggedIn' ] ) {
-          next();
-        }
-
-        next( false );
-      }
+      beforeEnter: isUserLoggedIn
     },
     {
       path: '/*',

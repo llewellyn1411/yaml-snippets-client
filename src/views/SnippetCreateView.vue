@@ -53,7 +53,6 @@
 import { mapActions } from 'vuex';
 import InputText from '../components/InputText';
 
-// TODO: Navigate to newly created snippet
 // TODO: Rest validation on failed submission
 
 export default {
@@ -129,7 +128,7 @@ export default {
                 this.isSubmitBtnLoading = true;
 
                 try {
-                    await this.createSnippet({
+                    const snippet = await this.createSnippet({
                         name: this.name,
                         description: this.description,
                         content: this.snippet
@@ -140,6 +139,8 @@ export default {
                         message: '',
                         type: 'success'
                     });
+
+                    this.$router.push({ name: 'snippet-customise', params: { id: snippet.id } });
                 } catch (e) {
                     this.isValidForm = false;
                     this.showNotification({

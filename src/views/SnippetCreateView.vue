@@ -53,8 +53,6 @@
 import { mapActions } from 'vuex';
 import InputText from '../components/InputText';
 
-// TODO: Rest validation on failed submission
-
 export default {
     name: 'SnippetCreateView',
     components: {
@@ -148,6 +146,8 @@ export default {
                         message: e,
                         type: 'error'
                     });
+
+                    this.$router.push('/');
                 }
                 this.isSubmitBtnLoading = false;
             }

@@ -52,6 +52,10 @@
 <script>
 import { mapActions } from 'vuex';
 import InputText from '../components/InputText';
+
+// TODO: Navigate to newly created snippet
+// TODO: Rest validation on failed submission
+
 export default {
     name: 'SnippetCreateView',
     components: {

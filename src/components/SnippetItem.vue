@@ -28,6 +28,8 @@
 import { mapActions } from 'vuex';
 import Counter from '@/components/Counter';
 
+// TODO: Remove snippet when deleted
+
 export default {
     name: 'SnippetItem',
     components: {

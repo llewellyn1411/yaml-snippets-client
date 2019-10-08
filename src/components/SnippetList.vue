@@ -21,6 +21,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import SnippetItem from '@/components/SnippetItem';
 
+// TODO: Update star count on star/unstar
 export default {
     name: 'SnippetList',
     components: {

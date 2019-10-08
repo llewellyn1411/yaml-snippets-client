@@ -140,7 +140,6 @@ export default {
                 this.isEditBtnLoading = true;
 
                 try {
-                    // TODO: Honey pot
                     await this.updateSnippet({
                         id: this.snippetId,
                         name: this.name,

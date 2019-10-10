@@ -82,7 +82,7 @@ export default {
             state.starredSnippetIds.push( snippetId );
 
             if ( state.snippetsInView ) {
-                const starredSnippet = state.snippetsInView.find( ( snippet ) => snippet.objectID === snippetId );
+                const starredSnippet = state.snippetsInView.find( ( snippet ) => snippet.id === snippetId );
 
                 if ( starredSnippet ) {
                     starredSnippet.countStar += 1;
@@ -96,7 +96,7 @@ export default {
             }
 
             if ( state.snippetsInView ) {
-                const starredSnippet = state.snippetsInView.find( ( snippet ) => snippet.objectID === snippetId );
+                const starredSnippet = state.snippetsInView.find( ( snippet ) => snippet.id === snippetId );
 
                 if ( starredSnippet ) {
                     starredSnippet.countStar -= 1;

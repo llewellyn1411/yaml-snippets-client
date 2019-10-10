@@ -3,7 +3,7 @@
         <SnippetItem
             :uid="uid"
             :isLoggedIn="isLoggedIn"
-            :id="snippet.objectID"
+            :id="snippet.id"
             :name="snippet.name"
             :author="snippet.author.displayName"
             :authorId="snippet.author.uid"
@@ -11,7 +11,7 @@
             :content="snippet.content"
             :countStar="snippet.countStar"
             :editable="snippet.author.uid === uid"
-            :starred="starredSnippetIds.includes(snippet.objectID)"
+            :starred="starredSnippetIds.includes(snippet.id)"
             v-for="(snippet, index) in snippets"
             :key="index"
         />

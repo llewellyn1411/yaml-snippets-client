@@ -17,7 +17,11 @@ export default ( query: string, page: number = 0 ): Promise<SearchResult> => {
                 resolve( {
                     pages: result.nbPages,
                     page: result.page,
-                    results: result.hits
+                    results: result.hits.map( ( hit ) => {
+                        hit.id = hit.objectID;
+                        delete hit.objectID;
+                        return hit;
+                    } )
                 } );
             } )
             .catch( ( e ) => {

@@ -80,11 +80,27 @@ export default {
         },
         addStar( state: State, snippetId: string ) {
             state.starredSnippetIds.push( snippetId );
+
+            if ( state.snippetsInView ) {
+                const starredSnippet = state.snippetsInView.find( ( snippet ) => snippet.objectID === snippetId );
+
+                if ( starredSnippet ) {
+                    starredSnippet.countStar += 1;
+                }
+            }
         },
         removeStar( state: State, snippetId: string ) {
             const index = state.starredSnippetIds.indexOf( snippetId );
             if ( index !== -1 ) {
                 state.starredSnippetIds.splice( index, 1 );
+            }
+
+            if ( state.snippetsInView ) {
+                const starredSnippet = state.snippetsInView.find( ( snippet ) => snippet.objectID === snippetId );
+
+                if ( starredSnippet ) {
+                    starredSnippet.countStar -= 1;
+                }
             }
         }
     },

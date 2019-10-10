@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueClipboard from 'vue-clipboard2';
-import firebase from './firebase';
+import firebase, { analytics } from './firebase';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -19,6 +19,7 @@ new Vue( {
     created() {
         firebase.auth().onAuthStateChanged( ( user ) => {
             if ( user ) {
+                analytics.setUserId( user.uid );
                 this.$store.dispatch( 'user/setUserLoggedInStatus', true );
                 this.$store.dispatch( 'user/setUserName', user.displayName );
                 this.$store.dispatch( 'user/setUserEmail', user.email );

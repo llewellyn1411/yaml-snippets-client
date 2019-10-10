@@ -51,6 +51,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import logEvent from '../utils/logEvent';
 import InputText from '../components/InputText';
 
 export default {
@@ -72,6 +73,9 @@ export default {
                 snippet: false
             }
         };
+    },
+    created() {
+        logEvent('snippet_create_open');
     },
     methods: {
         ...mapActions('snippets', ['createSnippet']),
@@ -123,6 +127,8 @@ export default {
         },
         async onSubmit() {
             if (this.isValidForm) {
+                logEvent('snippet_create_submitted');
+
                 this.isSubmitBtnLoading = true;
 
                 try {

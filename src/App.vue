@@ -33,7 +33,7 @@ export default {
         ...mapActions('notification', ['hideNotification']),
         async onSignOut() {
             await this.signOut();
-            this.$router.push('/');
+            this.$router.push({ name: 'explore' });
         }
     },
     computed: {

@@ -51,6 +51,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import logEvent from '../utils/logEvent';
 import InputText from '../components/InputText';
 
 export default {
@@ -75,6 +76,7 @@ export default {
         };
     },
     async created() {
+        logEvent('snippet_edit_open', { id: this.id });
         this.loadSnippet(this.id).then((payload) => {
             this.snippetId = payload.id;
             this.name = payload.name;
@@ -137,6 +139,7 @@ export default {
         },
         async onSubmit() {
             if (this.isFormValid) {
+                logEvent('snippet_edit_submitted', { id: this.id });
                 this.isEditBtnLoading = true;
 
                 try {

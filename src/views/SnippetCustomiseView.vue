@@ -35,6 +35,7 @@ import { mapActions, mapGetters } from 'vuex';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-yaml';
 import firebase from '../firebase';
+import logEvent from '../utils/logEvent';
 import Counter from '@/components/Counter';
 
 const regex = /{{([a-zA-Z]+):([a-zA-Z0-9]+)}}/g;
@@ -55,6 +56,7 @@ export default {
         this.unsubscribe();
     },
     async created() {
+        logEvent('snippet_viewed', { id: this.id });
         this.unsubscribe = firebase
             .firestore()
             .collection('snippets')
@@ -97,9 +99,11 @@ export default {
     },
     methods: {
         onValueChanged(index, value) {
+            logEvent('snippet_customised', { id: this.id });
             this.variables.splice(index, 1, Object.assign(this.variables[index], { value: value.target.value }));
         },
         async onCopy() {
+            logEvent('snippet_copied', { id: this.id });
             this.$copyText(this.liveContent);
         }
     }

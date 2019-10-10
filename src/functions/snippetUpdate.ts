@@ -1,5 +1,6 @@
 import validate from 'validate.js';
 import firebase from 'firebase/app';
+import logEvent from '../utils/logEvent';
 
 interface UpdateSnippetPayload {
     name: string;
@@ -53,6 +54,7 @@ export default ( snippetId: string, payload: UpdateSnippetPayload ) => {
         return Promise.reject( validationErrors[ 0 ] );
     }
 
+    logEvent( 'snippet_update', { id: snippetId } );
     return firebase.firestore().collection( 'snippets' ).doc( snippetId ).update( {
         name: payload.name,
         content: payload.content,

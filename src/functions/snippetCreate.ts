@@ -1,5 +1,6 @@
 import validate from 'validate.js';
 import firebase from 'firebase/app';
+import logEvent from '../utils/logEvent';
 
 interface CreateSnippetPayload {
     userId: string;
@@ -68,6 +69,7 @@ export default ( payload: CreateSnippetPayload ) => {
             reject( validationErrors[ 0 ] );
         }
 
+        logEvent( 'snippet_create_attempt' );
         firebase.firestore().collection( 'snippets' )
             .add( {
                 name: payload.name,
@@ -80,12 +82,14 @@ export default ( payload: CreateSnippetPayload ) => {
             } )
             .then( ( doc ) => doc.get() )
             .then( ( doc ) => {
+                logEvent( 'snippet_create_success', { id: doc.id } );
                 resolve( {
                     id: doc.id,
                     ...doc.data()
                 } );
             } )
             .catch( ( e ) => {
+                logEvent( 'snippet_create_failed' );
                 reject( 'Failed to create snippet' );
             } );
     } );

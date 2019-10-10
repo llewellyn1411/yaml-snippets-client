@@ -9,10 +9,21 @@
 
 <script>
 import firebase from '../firebase';
+import logEvent from '../utils/logEvent';
 import * as firebaseui from 'firebaseui';
 
 const uiConfig = {
     signInSuccessUrl: '/',
+    callbacks: {
+        signInSuccessWithAuthResult(authResult, redirectUrl) {
+            logEvent('login', { method: authResult.credential.signInMethod });
+            return true;
+        },
+        signInFailure(error) {
+            logEvent('login_failed', { reason: error });
+            return Promise.resolve();
+        }
+    },
     signInOptions: [
         firebase.auth.GithubAuthProvider.PROVIDER_ID,
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,

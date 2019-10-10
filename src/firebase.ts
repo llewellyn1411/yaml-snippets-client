@@ -16,7 +16,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp( firebaseConfig );
-firebase.analytics();
-firebase.performance();
+
+export const analytics = firebase.analytics();
+export const performance = firebase.performance();
 
 export default firebase;

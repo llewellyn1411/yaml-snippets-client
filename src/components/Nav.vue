@@ -9,7 +9,7 @@
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
-            <section class="navbar-section menu-items" :class="{ closed: !isMenuOpened }">
+            <section v-if="isAppReady" class="navbar-section menu-items" :class="{ closed: !isMenuOpened }">
                 <router-link to="/" class="btn btn-link" tabindex="2"><span>Explore</span></router-link>
                 <router-link v-if="isLoggedIn" to="/snippet/create" class="btn btn-link" tabindex="3"><span>Create</span></router-link>
                 <router-link v-if="!isLoggedIn" to="/signin" class="btn btn-link" tabindex="4"><span>Sign In</span></router-link>
@@ -25,6 +25,10 @@ export default {
     components: {},
     props: {
         visible: {
+            type: Boolean,
+            default: false
+        },
+        isAppReady: {
             type: Boolean,
             default: false
         },

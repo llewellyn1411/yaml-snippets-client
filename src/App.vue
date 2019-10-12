@@ -1,9 +1,10 @@
 <template>
     <div>
-        <Nav v-if="isAppReady" :visible="true" :isLoggedIn="isLoggedIn" :onSignOut="onSignOut" />
+        <Nav :isAppReady="isAppReady" :visible="true" :isLoggedIn="isLoggedIn" :onSignOut="onSignOut" />
 
-        <section class="container" v-if="isAppReady">
-            <router-view></router-view>
+        <section class="container">
+            <LoadingIcon :visible="!isAppReady" />
+            <router-view v-if="isAppReady"></router-view>
         </section>
 
         <Toast
@@ -21,12 +22,14 @@
 import { mapActions, mapState, mapGetters } from 'vuex';
 import Nav from '@/components/Nav';
 import Toast from '@/components/Toast';
+import LoadingIcon from '@/components/LoadingIcon';
 
 export default {
     name: 'App',
     components: {
         Nav,
-        Toast
+        Toast,
+        LoadingIcon
     },
     methods: {
         ...mapActions('user', [`signOut`]),

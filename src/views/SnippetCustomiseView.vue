@@ -1,6 +1,7 @@
 <template>
     <section>
         <h1 class="heading">Customize</h1>
+        <LoadingIcon :visible="loading" />
         <div v-if="!loading && snippet" class="card">
             <div class="card-header">
                 <div class="card-title">
@@ -37,12 +38,16 @@ import 'prismjs/components/prism-yaml';
 import firebase from '../firebase';
 import logEvent from '../utils/logEvent';
 import Counter from '@/components/Counter';
+import LoadingIcon from '@/components/LoadingIcon';
 
 const regex = /{{([a-zA-Z]+):([a-zA-Z0-9]+)}}/g;
 
 export default {
     name: 'SnippetCustomiseView',
-    components: { Counter },
+    components: {
+        Counter,
+        LoadingIcon
+    },
     data() {
         return {
             loading: true,

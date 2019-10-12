@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "short_name": "client",
+  "name": "YAML Snippets",
+  "short_name": "YAML",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

@@ -3,23 +3,23 @@
         <div class="card-header">
             <div class="card-title">
                 <div class="title-section">
-                    <h5>{{ name }}</h5>
+                    <h5 class="title">{{ name }}</h5>
                     <div v-if="isLoggedIn" class="star" :class="{ isActive: starred }" @click="toggleStar"></div>
                 </div>
                 <div class="counter-section">
                     <Counter label="stars" :value="countStar" />
                 </div>
             </div>
-            <div class="card-subtitle text-gray">{{ author }}</div>
+            <div class="author card-subtitle text-gray">{{ author }}</div>
         </div>
-        <div class="card-body">
+        <div class="description card-body">
             {{ description }}
         </div>
         <div class="card-footer">
             <div class="btn-group btn-group-block">
-                <router-link :to="`/snippet/${id}`" class="btn btn-primary">Customise</router-link>
-                <router-link v-if="editable" :to="`/snippet/edit/${id}`" class="btn btn-primary">Edit</router-link>
-                <button v-if="editable" @click="removeSnippet(id)" class="btn btn-primary">Delete</button>
+                <router-link :to="`/snippet/${id}`" class="btn btn-primary customise">Customise</router-link>
+                <router-link v-if="editable" :to="`/snippet/edit/${id}`" class="btn btn-primary edit">Edit</router-link>
+                <button v-if="editable" @click="removeSnippet(id)" class="btn btn-primary delete">Delete</button>
             </div>
         </div>
     </div>
@@ -38,8 +38,6 @@ export default {
         id: String,
         name: String,
         author: String,
-        authorId: String,
-        content: String,
         description: String,
         countStar: Number,
         editable: Boolean,
@@ -77,7 +75,7 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .snippet-list-item {
     .card-title {
         display: flex;

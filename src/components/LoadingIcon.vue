@@ -5,17 +5,11 @@
 <script>
 export default {
     name: 'LoadingIcon',
-    components: {},
     props: {
         visible: {
             type: Boolean,
             default: false
         }
-    },
-    data() {
-        return {
-            //
-        };
     }
 };
 </script>

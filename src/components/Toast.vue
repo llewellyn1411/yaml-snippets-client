@@ -5,8 +5,8 @@
             :class="{ 'toast-success': type === 'success', 'toast-error': type === 'error', 'toast-warn': type === 'warning' }"
         >
             <button class="btn btn-clear float-right" @click="hide"></button>
-            <h5>{{ title }}</h5>
-            <p v-if="message">{{ message }}</p>
+            <h5 class="title">{{ title }}</h5>
+            <p v-if="message" class="message">{{ message }}</p>
         </div>
     </div>
 </template>
@@ -14,7 +14,6 @@
 <script>
 export default {
     name: 'Toast',
-    components: {},
     props: {
         visible: {
             type: Boolean,
@@ -57,7 +56,7 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .toast-wrapper {
     position: fixed;
     width: 100%;

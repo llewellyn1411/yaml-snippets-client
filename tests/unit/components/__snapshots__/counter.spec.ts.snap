@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Counter.vue renders correctly 1`] = `
+<div class="counter-container">
+  <div class="counter-value">987</div>
+  <div class="counter-label">things</div>
+</div>
+`;

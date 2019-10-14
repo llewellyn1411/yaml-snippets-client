@@ -1,7 +1,7 @@
 module.exports = {
     collectCoverage    : true,
     collectCoverageFrom: [
-        '**/*.vue',
+        '**/components/*.vue',
         '!**/node_modules/**'
     ],
     moduleFileExtensions: [

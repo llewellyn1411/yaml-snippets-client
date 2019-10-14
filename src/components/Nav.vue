@@ -10,10 +10,10 @@
                 <div class="line"></div>
             </div>
             <section v-if="isAppReady" class="navbar-section menu-items" :class="{ closed: !isMenuOpened }">
-                <router-link to="/" class="btn btn-link" tabindex="2"><span>Explore</span></router-link>
-                <router-link v-if="isLoggedIn" to="/snippet/create" class="btn btn-link" tabindex="3"><span>Create</span></router-link>
-                <router-link v-if="!isLoggedIn" to="/signin" class="btn btn-link" tabindex="4"><span>Sign In</span></router-link>
-                <a v-if="isLoggedIn" href="#" class="btn btn-link" tabindex="4" @click="signOut"><span>Sign Out</span></a>
+                <router-link to="/" class="btn btn-link explore" tabindex="2"><span>Explore</span></router-link>
+                <router-link v-if="isLoggedIn" to="/snippet/create" class="btn btn-link create" tabindex="3"><span>Create</span></router-link>
+                <router-link v-if="!isLoggedIn" to="/signin" class="btn btn-link sign-in" tabindex="4"><span>Sign In</span></router-link>
+                <a v-if="isLoggedIn" href="#" class="btn btn-link sign-out" tabindex="4" @click="signOut"><span>Sign Out</span></a>
             </section>
         </div>
     </header>
@@ -24,10 +24,6 @@ export default {
     name: 'Nav',
     components: {},
     props: {
-        visible: {
-            type: Boolean,
-            default: false
-        },
         isAppReady: {
             type: Boolean,
             default: false

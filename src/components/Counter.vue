@@ -10,10 +10,6 @@ export default {
     name: 'Counter',
     components: {},
     props: {
-        visible: {
-            type: Boolean,
-            default: false
-        },
         value: {
             type: Number,
             default: 0
@@ -22,11 +18,6 @@ export default {
             type: String,
             default: ''
         }
-    },
-    data() {
-        return {
-            //
-        };
     }
 };
 </script>

@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toast.vue should show a toast 1`] = `
+<div class="toast-wrapper active">
+  <div class="toast toast-success"><button class="btn btn-clear float-right"></button>
+    <h5 class="title">This is a toast</h5>
+    <p class="message">Do as it says</p>
+  </div>
+</div>
+`;

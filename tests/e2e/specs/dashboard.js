@@ -17,23 +17,18 @@ describe( 'Home Page', () => {
         cy.url().should( 'include', 'snippet' );
     } );
 
+    it( 'can sign in', () => {
+        cy.signIn();
+    } );
+
+    /*it( 'can log a user out', () => {
+
+    } );
+
     it( 'can star/unstar a snippet', () => {
     } );
 
     it( 'can navigate to snippet creation page', () => {
-        cy
-            .get( 'nav' )
-            .find( '[name="create"]' )
-            .click();
 
-        cy.url().should( 'include', 'snippet/create' );
-    } );
-
-    it( 'can navigate to sign in page', () => {
-
-    } );
-
-    it( 'can log a user out', () => {
-
-    } );
+    } );*/
 } );

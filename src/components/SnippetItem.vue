@@ -17,7 +17,7 @@
         </div>
         <div class="card-footer">
             <div class="btn-group btn-group-block">
-                <router-link :to="`/snippet/${id}`" class="btn btn-primary customise">Customise</router-link>
+                <router-link :to="`/snippet/${id}`" class="btn btn-primary customise" data-name="customise">Customise</router-link>
                 <router-link v-if="editable" :to="`/snippet/edit/${id}`" class="btn btn-primary edit">Edit</router-link>
                 <button v-if="editable" @click="removeSnippet(id)" class="btn btn-primary delete">Delete</button>
             </div>

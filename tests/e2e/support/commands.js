@@ -26,9 +26,9 @@
 
 Cypress.Commands.add( 'navigateToSnippet', ( index = 0 ) => {
     cy
-        .get( '.snippet-list>.snippet-item' )
+        .get( '.snippet-list>.snippet-list-item' )
         .eq( index )
-        .find( '[name="customise"]' )
+        .find( '[data-name="customise"]' )
         .click();
 } );
 
@@ -42,4 +42,15 @@ Cypress.Commands.add( 'buttonIsEnabled', ( selector ) => {
     cy
         .get( selector )
         .should( 'be.not.disabled' );
+} );
+
+Cypress.Commands.add( 'signIn', ( selector ) => {
+    cy
+        .get( '[data-name="sign-in"]' )
+        .click();
+
+    cy
+        .get( '[data-provider-id="google.com"]' )
+        .click()
+        .wait( 500 );
 } );

@@ -1,6 +1,5 @@
 <template>
     <section>
-        <h1 class="heading">Welcome</h1>
         <div class="auth card">
             <div id="auth-container"></div>
         </div>

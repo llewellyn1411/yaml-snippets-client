@@ -1,12 +1,11 @@
 <template>
     <section class="page-create">
-        <h1 class="heading">Create</h1>
         <div class="card">
             <div class="card-body">
                 <form class="form-horizontal">
                     <InputText
                         name="Name"
-                        placeholder="Name"
+                        placeholder="Snippet name"
                         :tabIndex="5"
                         :maxlength="20"
                         :validator="validateName"
@@ -15,7 +14,7 @@
                     />
                     <InputText
                         name="Description"
-                        placeholder="Description"
+                        placeholder="Snippet description"
                         type="textarea"
                         :tabIndex="6"
                         :maxlength="500"
@@ -25,14 +24,27 @@
                     />
                     <InputText
                         name="Snippet"
-                        placeholder="Snippet"
+                        placeholder="Snippet content"
                         type="textarea"
+                        class="snippet-textarea"
                         :tabIndex="7"
                         :maxlength="1000"
                         :validator="validateSnippet"
                         @state-change="onSnippetValidityChange"
                         v-model="snippet"
                     />
+
+                    <div>
+                        <p>You can make your snippet customisable by following this format.</p>
+                        <code>{{ example }}</code>
+                        <br />
+                        <p>Example</p>
+                        <code>{{ example1 }}</code>
+                        <br />
+                        <p>Creates a customise "nodeVersion" with the default value of 10</p>
+                        <code>{{ example2 }}</code>
+                        <br />
+                    </div>
 
                     <button
                         type="button"
@@ -51,6 +63,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import utf8 from 'utf8';
 import logEvent from '../utils/logEvent';
 import InputText from '../components/InputText';
 
@@ -71,7 +84,10 @@ export default {
                 name: false,
                 description: false,
                 snippet: false
-            }
+            },
+            example: '{{variableName:defaultValue}}',
+            example1: 'FROM node:{{nodeVersion:10}}',
+            example2: 'FROM node:10'
         };
     },
     created() {
@@ -135,7 +151,7 @@ export default {
                     const snippet = await this.createSnippet({
                         name: this.name,
                         description: this.description,
-                        content: this.snippet
+                        content: utf8.encode(this.snippet)
                     });
 
                     this.showNotification({

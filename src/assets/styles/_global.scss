@@ -83,6 +83,13 @@ html {
 code {
     display: block;
     word-break: break-all !important;
+    white-space: pre-line !important;
+}
+
+.snippet-textarea {
+    textarea {
+        height: 300px;
+    }
 }
 
 @media (min-width: 1280px) {

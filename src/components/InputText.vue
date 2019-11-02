@@ -53,7 +53,7 @@ export default {
         return {
             inputValue: '',
             message: '',
-            isValid: true
+            isValid: false
         };
     },
     watch: {

@@ -7,11 +7,25 @@
                 <div class="card-subtitle text-gray">{{ userDetails.email }}</div>
             </div>
             <div class="card-body">
-                <button class="btn btn-primary" :class="{ loading: isAccountDeleted }" @click="deleteUserAccount">Delete Account</button>
+                <button class="btn btn-primary" :class="{ loading: isAccountDeleted }" @click="shoModal">Delete Account</button>
             </div>
             <div class="card-footer" v-if="userSnippets">
                 <h4>Snippets</h4>
                 <SnippetList :snippets="userSnippets" :uid="userDetails.id" :isLoggedIn="true" />
+            </div>
+        </div>
+        <div class="modal" :class="{ active: isConfirmationRequired }">
+            <div class="modal-overlay" aria-label="Close"></div>
+            <div class="modal-container">
+                <div class="modal-header">
+                    <div class="modal-title h5">Are you sure you want to delete your account?</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group btn-group-block">
+                        <button class="btn btn-primary" :class="{ loading: isAccountDeleted }" @click="deleteUserAccount">Yes</button>
+                        <button class="btn btn-error" :class="{ disabled: isAccountDeleted }" @click="dismissModal">No</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,7 +44,9 @@ export default {
     },
     data() {
         return {
-            isAccountDeleted: false
+            isAccountDeleted: false,
+            isConfirmationRequired: false,
+            isDeletionConfirmed: false
         };
     },
     computed: {
@@ -42,18 +58,26 @@ export default {
         ...mapActions('notification', ['showNotification']),
         ...mapActions('user', ['deleteUser']),
         deleteUserAccount() {
-            this.isAccountDeleted = true;
-            this.deleteUser()
-                .then(() => {
-                    this.$router.push({ name: 'explore' });
-                })
-                .catch(() => {
-                    this.showNotification({
-                        title: 'Error',
-                        message: 'Unable to delete account',
-                        type: 'error'
+            if (this.isConfirmationRequired) {
+                this.isAccountDeleted = true;
+                this.deleteUser()
+                    .then(() => {
+                        this.$router.push({ name: 'explore' });
+                    })
+                    .catch(() => {
+                        this.showNotification({
+                            title: 'Error',
+                            message: 'Unable to delete account',
+                            type: 'error'
+                        });
                     });
-                });
+            }
+        },
+        shoModal() {
+            this.isConfirmationRequired = true;
+        },
+        dismissModal() {
+            this.isConfirmationRequired = false;
         }
     },
     mounted() {

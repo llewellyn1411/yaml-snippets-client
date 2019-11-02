@@ -1,6 +1,5 @@
 <template>
     <section>
-        <h1 class="heading">Customize</h1>
         <LoadingIcon :visible="loading" />
         <div v-if="!loading && snippet" class="card">
             <div class="card-header">
@@ -19,7 +18,7 @@
                         type="text"
                         autocomplete="off"
                         :id="`input-${item.name}`"
-                        :placeholder="item.name"
+                        :placeholder="item.value"
                         @input="onValueChanged(index, $event)"
                     />
                 </div>
@@ -34,6 +33,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Prism from 'prismjs';
+import utf8 from 'utf8';
 import 'prismjs/components/prism-yaml';
 import firebase from '../firebase';
 import logEvent from '../utils/logEvent';

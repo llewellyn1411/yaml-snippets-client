@@ -1,6 +1,5 @@
 <template>
     <section class="page-edit">
-        <h1 class="heading">Edit</h1>
         <div class="card">
             <div class="card-body">
                 <form class="form-horizontal">

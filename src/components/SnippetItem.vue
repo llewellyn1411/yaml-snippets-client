@@ -4,7 +4,7 @@
             <div class="card-title">
                 <div class="title-section">
                     <h5 class="title">{{ name }}</h5>
-                    <div v-if="isLoggedIn" class="star" :class="{ isActive: starred }" @click="toggleStar"></div>
+                    <div v-if="isLoggedIn && !editable" class="star" :class="{ isActive: starred }" @click="toggleStar"></div>
                 </div>
                 <div class="counter-section">
                     <Counter label="stars" :value="countStar" />

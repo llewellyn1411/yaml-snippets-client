@@ -4,18 +4,21 @@
             <input type="text" class="form-input" placeholder="Search Snippets" v-model="searchQuery" />
             <i class="form-icon" :class="{ loading: isSearching }"></i>
         </div>
-        <SnippetList v-if="snippetsInView" :snippets="snippetsInView" :uid="uid" :isLoggedIn="isUserLoggedIn" />
-        <ul class="pagination">
-            <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <a href="#" @click="navigateToPreviousPage">Previous</a>
-            </li>
-            <li class="page-item" :class="{ active: index === currentPage }" v-for="index in totalPages" :key="index">
-                <a href="#" @click="navigateToPage(index)">{{ index }}</a>
-            </li>
-            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <a href="#" @click="navigateToNextPage">Next</a>
-            </li>
-        </ul>
+        <LoadingIcon :visible="!snippetsInView" />
+        <div v-if="snippetsInView">
+            <SnippetList :snippets="snippetsInView" :uid="uid" :isLoggedIn="isUserLoggedIn" />
+            <ul class="pagination">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <a href="#" @click="navigateToPreviousPage">Previous</a>
+                </li>
+                <li class="page-item" :class="{ active: index === currentPage }" v-for="index in totalPages" :key="index">
+                    <a href="#" @click="navigateToPage(index)">{{ index }}</a>
+                </li>
+                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                    <a href="#" @click="navigateToNextPage">Next</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -23,11 +26,13 @@
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { debounce } from 'lodash';
 import SnippetList from '@/components/SnippetList';
+import LoadingIcon from '@/components/LoadingIcon';
 
 export default {
     name: 'HomeView',
     components: {
-        SnippetList
+        SnippetList,
+        LoadingIcon
     },
     data() {
         return {

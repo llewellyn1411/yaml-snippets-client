@@ -48,6 +48,12 @@ export default new Router( {
       beforeEnter: isUserLoggedIn
     },
     {
+      path: '/account',
+      name: 'account',
+      component: () => import( './views/AccountView.vue' ),
+      beforeEnter: isUserLoggedIn
+    },
+    {
       path: '/*',
       component: HomeView
     }

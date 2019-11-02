@@ -1,6 +1,7 @@
 import { Store } from 'vuex';
 import Snippet from '../../interfaces/Snippet';
 import getUserDetails from '../../functions/getUserDetails';
+import getUserSnippets from '../../functions/getUserSnippets';
 import getStarredSnippetIds from '../../functions/getStarredSnippetIds';
 import snippetsSearch from '../../functions/snippetsSearch';
 import snippetCreate from '../../functions/snippetCreate';
@@ -12,6 +13,7 @@ import snippetRemoveStar from '../../functions/snippetRemoveStar';
 
 interface State {
     snippetsInView?: Snippet[];
+    userSnippets?: Snippet[];
     snippetQuery: string;
     totalPages: number;
     currentPage: number;
@@ -30,6 +32,7 @@ interface SearchPayload {
 
 const defaultState: State = {
     snippetsInView: undefined,
+    userSnippets: undefined,
     snippetQuery: '',
     totalPages: 0,
     currentPage: 0,
@@ -46,6 +49,11 @@ export default {
         setSnippetsInView( state: State, newSnippets: Snippet[] ) {
             state.snippetsInView = newSnippets;
         },
+        setUserSnippets( state: State, snippets: Snippet[] ) {
+            if ( snippets && snippets.length > 0 ) {
+                state.userSnippets = snippets;
+            }
+        },
         setTotalPages( state: State, totalPages: number ) {
             state.totalPages = totalPages;
         },
@@ -60,6 +68,17 @@ export default {
 
                 if ( index !== -1 ) {
                     state.snippetsInView.splice( index, 1 );
+                }
+            }
+        },
+        removeUserSnippet( state: State, id: string ) {
+            if ( state.userSnippets ) {
+                const index = state.userSnippets.findIndex( ( snippet ) => {
+                    return snippet.id === id;
+                } );
+
+                if ( index !== -1 ) {
+                    state.userSnippets.splice( index, 1 );
                 }
             }
         },
@@ -119,6 +138,12 @@ export default {
                     commit( 'setCurrentPage', payload.page );
                 } );
         },
+        loadUserSnippets( { commit, state }: Store<State> ) {
+            return getUserSnippets()
+                .then( ( payload ) => {
+                    commit( 'setUserSnippets', payload );
+                } );
+        },
         searchSnippets( { commit }: Store<State>, searchPayload: SearchPayload ) {
             const query = searchPayload.query;
             const page = searchPayload.page - 1;
@@ -151,6 +176,7 @@ export default {
             return snippetDelete( id )
                 .then( () => {
                     commit( 'removeSnippetFromList', id );
+                    commit( 'removeUserSnippet', id );
                 } );
         },
         updateSnippet( { commit }: Store<State>, snippet: Snippet ) {
@@ -182,6 +208,9 @@ export default {
     getters: {
         snippetsInView( state: State ) {
             return state.snippetsInView;
+        },
+        userSnippets( state: State ) {
+            return state.userSnippets;
         },
         snippetQuery( state: State ) {
             return state.snippetQuery;

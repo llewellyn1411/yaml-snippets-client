@@ -1,0 +1,69 @@
+<template>
+    <div class="page account" id="account-view">
+        <LoadingIcon :visible="!userDetails" />
+        <div class="card" v-if="userDetails">
+            <div class="card-header">
+                <div class="card-title h5">{{ userDetails.name }}</div>
+                <div class="card-subtitle text-gray">{{ userDetails.email }}</div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary" :class="{ loading: isAccountDeleted }" @click="deleteUserAccount">Delete Account</button>
+            </div>
+            <div class="card-footer" v-if="userSnippets">
+                <h4>Snippets</h4>
+                <SnippetList :snippets="userSnippets" :uid="userDetails.id" :isLoggedIn="true" />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapActions, mapState, mapGetters } from 'vuex';
+import LoadingIcon from '@/components/LoadingIcon';
+import SnippetList from '@/components/SnippetList';
+
+export default {
+    name: 'AccountView',
+    components: {
+        LoadingIcon,
+        SnippetList
+    },
+    data() {
+        return {
+            isAccountDeleted: false
+        };
+    },
+    computed: {
+        ...mapGetters('user', ['userDetails']),
+        ...mapGetters('snippets', ['userSnippets'])
+    },
+    methods: {
+        ...mapActions('snippets', ['loadUserSnippets']),
+        ...mapActions('notification', ['showNotification']),
+        ...mapActions('user', ['deleteUser']),
+        deleteUserAccount() {
+            this.isAccountDeleted = true;
+            this.deleteUser()
+                .then(() => {
+                    this.$router.push({ name: 'explore' });
+                })
+                .catch(() => {
+                    this.showNotification({
+                        title: 'Error',
+                        message: 'Unable to delete account',
+                        type: 'error'
+                    });
+                });
+        }
+    },
+    mounted() {
+        this.loadUserSnippets().catch(() => {
+            this.showNotification({
+                title: 'Error',
+                message: 'Unable to retrieve snippets',
+                type: 'error'
+            });
+        });
+    }
+};
+</script>

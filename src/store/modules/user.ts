@@ -1,5 +1,6 @@
 import { Store } from 'vuex';
 import signOut from '../../functions/signOut';
+import deleteUserAccount from '../../functions/deleteUserAccount';
 
 interface State {
     isLoggedIn: boolean;
@@ -58,6 +59,11 @@ export default {
                     commit( 'setLoggedInStatus', false );
                     commit( 'clearUserDetails' );
                 } );
+        },
+        deleteUser( { commit, dispatch }: Store<State> ) {
+            return deleteUserAccount().then( () => {
+                dispatch( 'signOut' );
+            } );
         }
     },
     getters: {

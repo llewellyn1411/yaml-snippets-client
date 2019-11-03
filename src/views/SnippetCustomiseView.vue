@@ -52,6 +52,7 @@ export default {
         return {
             loading: true,
             liveContent: '',
+            copyContent: '',
             unsubscribe: null,
             snippet: null,
             variables: []
@@ -99,6 +100,7 @@ export default {
                 return output.replace(new RegExp(regexStr, 'g'), variable.value);
             }, this.snippet.content);
 
+            this.copyContent = content;
             this.liveContent = Prism.highlight(content, Prism.languages.yaml, 'yaml');
         }
     },
@@ -109,7 +111,7 @@ export default {
         },
         async onCopy() {
             logEvent('snippet_copied', { id: this.id });
-            this.$copyText(this.liveContent);
+            this.$copyText(this.copyContent);
         }
     }
 };

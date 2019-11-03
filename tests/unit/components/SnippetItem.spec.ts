@@ -50,24 +50,4 @@ describe( 'SnippetItem.vue', () => {
         expect( wrapper.find( '.btn.edit' ).exists() ).toBe( true );
         expect( wrapper.find( '.btn.delete' ).exists() ).toBe( true );
     } );
-
-    test( 'should display the star when logged in', () => {
-        const propsData = {
-            uid: faker.random.uuid(),
-            id: faker.random.uuid(),
-            name: faker.random.word(),
-            author: faker.random.word(),
-            description: faker.lorem.paragraph(),
-            countStar: faker.random.number(),
-            editable: true,
-            isLoggedIn: true
-        };
-
-        const wrapper = shallowMount( SnippetItem, {
-            stubs: [ 'router-link' ],
-            propsData
-        } );
-
-        expect( wrapper.find( '.star' ).exists() ).toBe( true );
-    } );
 } );
